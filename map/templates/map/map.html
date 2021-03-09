@@ -1,0 +1,19 @@
+{% extends "map/header.html" %}
+{% block content%}
+
+{% load leaflet_tags %}
+
+<head>
+    {% leaflet_js %}
+    {% leaflet_css %}
+</head>
+<style>
+  #yourmap {
+    width: 100%;
+    height: calc(100vh - 65px);
+  }
+</style>
+<body>
+    {% leaflet_map "yourmap" %}
+</body>
+{% endblock %}

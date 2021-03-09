@@ -1,0 +1,12 @@
+{% extends "map/header.html" %}
+
+{% block content%}
+<div class="container">
+  <form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <br>
+    <button type="submit">register</button>
+  </form>
+</div>
+{% endblock %}

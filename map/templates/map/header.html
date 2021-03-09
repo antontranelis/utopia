@@ -1,0 +1,17 @@
+<head>
+  {% load static %}
+  <link href="{% static 'map/css/materialize.css' %}" rel="stylesheet">
+  <script src="{% static 'map/js/materialize.js' %}"></script>
+
+</head>
+
+<body>
+
+{% include "map/includes/navbar.html" %}
+
+{% include "map/includes/messages.html" %}
+
+
+  {% block content%}
+  {% endblock %}
+</body>

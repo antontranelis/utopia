@@ -1,0 +1,61 @@
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .models import Event
+from .forms import NewUserForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
+
+# Create your views here.
+
+def map(request):
+    return render(request=request,
+                  template_name="map/map.html",
+                  context={"events": Event.objects.all})
+
+def calendar(request):
+    return render(request=request,
+                  template_name="map/calendar.html",
+                  context={"events": Event.objects.all})
+
+def register(request):
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f"New account created: {username}")
+            login(request, user)
+            return redirect("map:map")
+        else:
+            for msg in form.error_messages:
+                messages.error(request, f"{msg}: {form.error_messages[msg]}")
+
+    form = NewUserForm
+    return render(request,
+                  "map/register.html",
+                  context={"form":form})
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "Logged out successfully")
+    return redirect("map:map")
+
+def login_request(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are logged in as {username}")
+                return redirect('/')
+            else:
+                messages.error(request, 'Invalid username or password.')
+        else:
+            messages.error(request, 'Invalid username or password.')
+
+    form = AuthenticationForm()
+    return render(request, "map/login.html", context={"form":form})

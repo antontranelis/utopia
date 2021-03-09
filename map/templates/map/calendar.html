@@ -1,0 +1,7 @@
+{% extends "map/header.html" %}
+
+{% block content%}
+  {% for e in events %}
+    <p>{{e}} - {{e.event_start}} </p>
+  {% endfor %}
+{% endblock %}
