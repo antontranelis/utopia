@@ -15,5 +15,52 @@
 </style>
 <body>
     {% leaflet_map "yourmap" %}
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large brown">
+        <i class="large material-icons">add</i>
+      </a>
+      <ul>
+        <li><a class="btn-floating red darken-3"><i class="material-icons">location_on</i></a></li>
+        <li><a class="btn-floating yellow darken-3"><i class="material-icons">event</i></a></li>
+        <li><a class="btn-floating green darken-3"><i class="material-icons">account_circle</i></a></li>
+        <li><a class="btn-floating blue darken-3"><i class="material-icons">local_offer</i></a></li>
+      </ul>
+    </div>
 </body>
+<script>
+
+  // init Buttons
+  document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.fixed-action-btn');
+  var instances = M.FloatingActionButton.init(elems);
+
+
+
+});
+    var map = null;
+    var new_marker_popup = L.popup({minWidth: 300, closeOnClick: false, keepInView: true});
+
+    window.addEventListener("map:init", function (e) {
+        map = e.detail.map;
+        {% for p in posts %}
+          L.marker([{{p.lat}}, {{p.lon}}]).bindPopup("<b>{{p.title}}</b><br>{{p.text}}").addTo(map);
+        {% endfor %}
+
+        map.on('dblclick', showCoordinates);
+    }, false);
+
+
+
+    function showCoordinates(e) {
+      	position= e.latlng;
+        new_marker_popup
+          .setLatLng(e.latlng)
+          .setContent(`{% include "map/includes/new_marker_popup.html" %}`)
+          .openOn(map);
+          var elems = document.querySelectorAll('select');
+          var instances = M.FormSelect.init(elems);
+          elems = document.querySelectorAll('.datepicker');
+          instances = M.Datepicker.init(elems, {container:'body'});
+        }
+</script>
 {% endblock %}

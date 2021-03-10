@@ -1,17 +1,17 @@
+{% load static %}
 <nav>
   <div class="nav-wrapper brown">
-    <a href="/" class="brand-logo">Utopia</a>
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li><a href="/">Map</a></li>
-      <li><a href="/calendar">Calendar</a></li>
+    <a style="margin-left:10px" href="/" class="brand-logo left"><b>Real Life</b></a>
+    <ul id="nav-mobile" class="right hide-on-down">
       {% if user.is_authenticated %}
-           <li><a href="/account">{{user.username|title}}</a></li>
+           <li><a href="/profile">{{user.username|title}}</a></li>
            <li><a href="/logout">Logout</a></li>
       {% else %}
           <li><a href="/login">Login</a></li>
           <li><a href="/register">Register</a></li>
       {% endif %}
-
     </ul>
+    <img height="44" style="margin-top:10px" class="right" src="{% static 'map/img/64_15.png' %}"></img>
+
   </div>
 </nav>

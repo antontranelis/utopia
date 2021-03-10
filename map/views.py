@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Event
+from .models import Post, Skill
 from .forms import NewUserForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
@@ -11,12 +11,18 @@ from django.contrib import messages
 def map(request):
     return render(request=request,
                   template_name="map/map.html",
-                  context={"events": Event.objects.all})
+                  context={"posts": Post.objects.all})
 
 def calendar(request):
     return render(request=request,
                   template_name="map/calendar.html",
-                  context={"events": Event.objects.all})
+                  context={"posts": Post.objects.all})
+
+def profile(request):
+    user = request.user
+    return render(request=request,
+                  template_name="map/profile.html",
+                  context={"user": user, "skillset": Skill.objects.all})
 
 def register(request):
     if request.method == "POST":

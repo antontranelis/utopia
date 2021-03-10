@@ -1,0 +1,38 @@
+{% extends "map/header.html" %}
+
+{% block content%}
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <h3>{{user.username|title}}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m12 l6">
+      <p>Skills</p>
+      <div id="skills" class="chips"></div>
+      <br>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('#skills');
+  var instances = M.Chips.init(elems, {data: [
+    {% for skill in user.profile.skills.all %}
+    {
+      tag: '{{skill.skill}}'
+    },
+    {% endfor %}],
+    autocompleteOptions: {
+      data: {
+        {% for skill in skillset %}
+          '{{skill.skill}}' : null,
+        {% endfor %}
+      },
+    },
+  });
+});
+
+</script>
+{% endblock %}
