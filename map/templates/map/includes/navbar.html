@@ -11,7 +11,8 @@
           <li><a href="/register">Register</a></li>
       {% endif %}
     </ul>
+    {% if user.is_authenticated %}
     <img height="44" style="margin-top:10px" class="right" src="{% static 'map/img/64_15.png' %}"></img>
-
+    {% endif %}
   </div>
 </nav>

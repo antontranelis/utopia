@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Post, Skill
-from .forms import NewUserForm
+from .forms import NewUserForm, PreferencesForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -65,3 +65,21 @@ def login_request(request):
 
     form = AuthenticationForm()
     return render(request, "map/login.html", context={"form":form})
+
+def preferences(request):
+    if request.method == "POST":
+        form = PreferencesForm(request.POST)
+        if form.is_valid():
+            return redirect("map:map")
+
+
+    user = request.user
+    initial_data = {
+        "name" : user.username,
+        "email": user.email,
+        "skills": user.profile.skills.all()
+    }
+    form = PreferencesForm(initial=initial_data)
+    return render(request=request,
+                  template_name="map/preferences.html",
+                  context={"form": form, "user": user, "skillset": Skill.objects.all})

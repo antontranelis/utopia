@@ -25,3 +25,4 @@ class Skill(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     skills = models.ManyToManyField(Skill)
+    avatar = models.ImageField()

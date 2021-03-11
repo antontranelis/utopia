@@ -1,5 +1,6 @@
 
   <form style="overflow: visible;">
+    {% csrf_token %}
     <div class="row">
       <div class="col s12">
         <div class="input-field">
@@ -11,29 +12,31 @@
           <label for="textarea1">Description</label>
         </div>
         <div class="input-field">
-          <i class="material-icons prefix">alarm</i>
+          <i style="color: #aaa" class="material-icons prefix">alarm</i>
           <input id="date" type="text" class="datepicker">
-          <label for="date">Date</label>
         </div>
         <div class="input-field">
-          <i class="material-icons prefix">share</i>
+          <i style="color: #aaa" class="material-icons prefix">share</i>
           <select multiple>
-            <option value="1">All</option>
-            <option value="2">Group</option>
-            <option value="3">Friend XY</option>
+            <option value="1" selected>public</option>
+            <option value="2">Group X</option>
+            <option value="3">Friend Y</option>
           </select>
         </div>
         <div class="input-field">
-          <i class="material-icons prefix">edit</i>
+          <i style="color: #aaa" class="material-icons prefix">edit</i>
           <select multiple>
-            <option value="1">All</option>
+            <option value="1" selected>just me</option>
             <option value="2">Group</option>
             <option value="3">Friend XY</option>
+            <option value="3">Everyone</option>
           </select>
         </div>
+        <br>
         <div style="display: flex;justify-content: center;">
-          <a class="waves-effect waves-light btn-small brown" style="color:#fff">Save</a>
+          <a class="waves-effect waves-light btn brown" style="color:#fff">Save</a>
         </div>
+        <br>
       </div>
     </div>
   </form>

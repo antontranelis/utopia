@@ -1,12 +1,21 @@
 {% extends "map/header.html" %}
+{% load static %}
 
 {% block content%}
 <div class="container">
   <div class="row">
-    <div class="col s12">
-      <h3>{{user.username|title}}</h3>
+    <div class="col s12 m6">
+      <div style="display: flex; align-items: center; margin-top:7px;">
+        <img src="{% static 'map/img/64_15.png'%}"></img>&nbsp;&nbsp;&nbsp;<p style="font-size: 240%;">{{user.username|title}}</p>
+      </div>
+    </div>
+    <div class="col s12 m6">
+      <br><br>
+
+      <img style="margin-bottom:-10px;" height="50" src="{% static 'map/img/badges.png' %}"></img>
     </div>
   </div>
+  <br><br>
   <div class="row">
     <div class="col s12 m12 l6">
       <p>Skills</p>

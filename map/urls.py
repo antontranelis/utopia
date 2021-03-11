@@ -22,6 +22,7 @@ urlpatterns = [
     path('', views.map, name='map'),
     path('calendar/', views.calendar, name="calendar"),
     path('profile/', views.profile, name="profile"),
+    path('preferences/', views.preferences, name="preferences"),
     path('register/', views.register, name="register"),
     path("login/", views.login_request, name="login"),
     path("logout/", views.logout_request, name="logout"),
