@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Post, Skill
+from .models import Post, Skill, Profile
 
 
 class NewUserForm(UserCreationForm):
@@ -18,8 +18,15 @@ class NewUserForm(UserCreationForm):
             user.save()
         return user
 
-class PreferencesForm(forms.Form):
-    name = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    avatar = forms.ImageField()
-    skills = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple, queryset = Skill.objects.all())
+class PreferencesForm(forms.ModelForm):
+   class Meta:
+       model = Profile
+       fields = ['skills','avatar']
+       widgets = {
+            'skills': forms.CheckboxSelectMultiple(attrs={'queryset': Skill.objects.all()}),
+        }
+
+    #name = forms.CharField(max_length=100)
+    #email = forms.EmailField(required=True)
+    #avatar = forms.ImageField(height_field=None, width_field=None, max_length=100)
+    #skills = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple, queryset = Skill.objects.all())

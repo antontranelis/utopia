@@ -73,13 +73,13 @@ def preferences(request):
             return redirect("map:map")
 
 
+
     user = request.user
     initial_data = {
-        "name" : user.username,
-        "email": user.email,
-        "skills": user.profile.skills.all()
+        "skills": user.profile.skills.all(),
+        "avatar": user.profile.avatar,
     }
     form = PreferencesForm(initial=initial_data)
     return render(request=request,
                   template_name="map/preferences.html",
-                  context={"form": form, "user": user, "skillset": Skill.objects.all})
+                  context={"form": form})

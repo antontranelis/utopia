@@ -38,29 +38,30 @@
 
 });
     var map = null;
-    var new_marker_popup = L.popup({minWidth: 300, closeOnClick: false, keepInView: true});
+    var popup = L.popup({minWidth: 300, closeOnClick: false, keepInView: true});
 
     window.addEventListener("map:init", function (e) {
         map = e.detail.map;
         {% for p in posts %}
-          L.marker([{{p.lat}}, {{p.lon}}]).bindPopup("<b>{{p.title}}</b><br>{{p.text}}").addTo(map);
+          L.marker([{{p.lat}}, {{p.lon}}]).bindPopup(`{% include "map/includes/popups/profile.html" %}`).addTo(map);
         {% endfor %}
 
-        map.on('dblclick', showCoordinates);
+        map.on('dblclick', showPopUp);
     }, false);
 
 
 
-    function showCoordinates(e) {
+    function showPopUp(e) {
       	position= e.latlng;
-        new_marker_popup
+        popup
           .setLatLng(e.latlng)
-          .setContent(`{% include "map/includes/new_marker_popup.html" %}`)
+          .setContent(`{% include "map/includes/popups/new_event.html" %}`)
           .openOn(map);
           var elems = document.querySelectorAll('select');
           var instances = M.FormSelect.init(elems);
           elems = document.querySelectorAll('.datepicker');
           instances = M.Datepicker.init(elems, {container:'body'});
-        }
+    }
+
 </script>
 {% endblock %}
