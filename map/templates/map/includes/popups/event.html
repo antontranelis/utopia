@@ -1,0 +1,30 @@
+
+{% load static %}
+
+
+
+  <div class="row">
+    <div class="col s12">
+      <p style="font-size: 180%; margin:0px;">{{e.title}}</p>
+    </div>
+    <div style="display: flex; align-items: center; margin-top:7px;" class="col s6">
+      <i style="color: #aaa" class="material-icons prefix">event</i>
+      <div>
+        <p style="margin:0px;">&nbsp;{{e.date_start | date:"F d Y"}}</p>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; margin-top:7px;" class="col s6">
+      <i style="color: #aaa" class="material-icons prefix">alarm</i>
+      <div>
+        <p style="margin:0px;">&nbsp;{{e.date_start | time:"H:i"}}</p>
+      </div>
+    </div>
+    <div class="col s12">
+      <p margin:0px;">{{e.text}}</p>
+      {% for tag in e.tags.all %}
+      <div class="chip">
+        #{{tag.tag}}
+      </div>
+      {% endfor %}
+    </div>
+  </div>

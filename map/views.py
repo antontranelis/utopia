@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Post, Skill
+from .models import Event, Place, UserPosition, Tag
 from .forms import NewUserForm, PreferencesForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
@@ -11,18 +11,13 @@ from django.contrib import messages
 def map(request):
     return render(request=request,
                   template_name="map/map.html",
-                  context={"posts": Post.objects.all})
-
-def calendar(request):
-    return render(request=request,
-                  template_name="map/calendar.html",
-                  context={"posts": Post.objects.all})
+                  context={"events": Event.objects.all, "places": Place.objects.all, "user_positions": UserPosition.objects.all})
 
 def profile(request):
     user = request.user
     return render(request=request,
                   template_name="map/profile.html",
-                  context={"user": user, "skillset": Skill.objects.all})
+                  context={"user": user, "tagset": Tag.objects.all})
 
 def register(request):
     if request.method == "POST":
@@ -76,7 +71,7 @@ def preferences(request):
 
     user = request.user
     initial_data = {
-        "skills": user.profile.skills.all(),
+        "tags": user.profile.tags.all(),
         "avatar": user.profile.avatar,
     }
     form = PreferencesForm(initial=initial_data)

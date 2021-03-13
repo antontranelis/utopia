@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Post, Skill, Profile
+from .models import Event, Place, Tag, Profile
 
 
 class NewUserForm(UserCreationForm):
@@ -21,9 +21,9 @@ class NewUserForm(UserCreationForm):
 class PreferencesForm(forms.ModelForm):
    class Meta:
        model = Profile
-       fields = ['skills','avatar']
+       fields = ['tags','avatar']
        widgets = {
-            'skills': forms.CheckboxSelectMultiple(attrs={'queryset': Skill.objects.all()}),
+            'tags': forms.CheckboxSelectMultiple(attrs={'queryset': Tag.objects.all()}),
         }
 
     #name = forms.CharField(max_length=100)

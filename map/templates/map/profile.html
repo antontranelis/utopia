@@ -23,9 +23,9 @@
   <br><br>
   <div class="row">
     <div class="col s12 m6 l6">
-      {% for skill in user.profile.skills.all %}
+      {% for tag in user.profile.tags.all %}
       <div class="chip">
-        {{skill.skill}}
+        {{tag.tag}}
       </div>
       {% endfor %}
       <br>

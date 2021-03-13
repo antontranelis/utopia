@@ -42,13 +42,24 @@
 
     window.addEventListener("map:init", function (e) {
         map = e.detail.map;
-        {% for p in posts %}
-          L.marker([{{p.lat}}, {{p.lon}}]).bindPopup(`{% include "map/includes/popups/profile.html" %}`).addTo(map);
+        {% for e in events %}
+          L.marker([{{e.lat}}, {{e.lon}}]).bindPopup(`{% include "map/includes/popups/event.html" %}`).addTo(map);
         {% endfor %}
-
-        map.on('dblclick', showPopUp);
+        {% for p in places %}
+          L.marker([{{p.lat}}, {{p.lon}}]).bindPopup(`{% include "map/includes/popups/place.html" %}`).addTo(map);
+        {% endfor %}
+        {% for up in user_positions %}
+          L.marker([{{up.lat}}, {{up.lon}}]).bindPopup(`{% include "map/includes/popups/profile.html" %}`).addTo(map);
+        {% endfor %}
+        map.on('dblclick', showCoordinates);
     }, false);
 
+    function showCoordinates(e) {
+      popup
+			.setLatLng(e.latlng)
+			.setContent("You clicked the map at " + e.latlng.toString())
+			.openOn(map);
+    }
 
 
     function showPopUp(e) {

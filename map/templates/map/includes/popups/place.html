@@ -1,0 +1,18 @@
+
+{% load static %}
+
+
+
+  <div class="row">
+    <div class="col s12">
+      <p style="font-size: 180%; margin:0px;">{{p.title}}</p>
+    </div>
+    <div class="col s12">
+      <p margin:0px;">{{p.text}}</p>
+      {% for tag in p.tags.all %}
+      <div class="chip">
+        #{{tag.tag}}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
