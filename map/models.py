@@ -29,7 +29,7 @@ class Event(models.Model):
     title = models.CharField(max_length=200)
     text = models.TextField()
     date_start = models.DateTimeField()
-    date_end = models.DateTimeField()
+    date_end = models.DateTimeField(blank=True)
     lat = models.FloatField()
     lon = models.FloatField()
     tags = models.ManyToManyField(Tag)
@@ -79,7 +79,8 @@ class Place(models.Model):
     def __str__(self):
         return self.title
 
-class UserPosition(models.Model):
+
+class Profile(models.Model):
     PUBLIC = 1
     LINK = 2
     PRIVATE = 3
@@ -88,21 +89,15 @@ class UserPosition(models.Model):
         (LINK, 'anyone with link'),
         (PRIVATE, 'only specific users'),
     )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    tags = models.ManyToManyField(Tag)
+    avatar = models.ImageField()
     lat = models.FloatField()
     lon = models.FloatField()
-    tags = models.ManyToManyField(Tag)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, related_name="user_positions")
     created_at = models.DateTimeField(auto_now=True)
     modified_at = models.DateTimeField(auto_now=True)
     share_status = models.SmallIntegerField(choices=SHARE_STATUS, default=PUBLIC, verbose_name="share status")
     share_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, verbose_name="share with", related_name="shared_positions")
 
-
     def __str__(self):
         return f"{self.user.username} - {self.created_at:%Y-%m-%d - %H:%M}"
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    tags = models.ManyToManyField(Tag)
-    avatar = models.ImageField()

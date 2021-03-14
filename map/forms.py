@@ -18,6 +18,33 @@ class NewUserForm(UserCreationForm):
             user.save()
         return user
 
+class NewEventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ("title", "text", "date_start", "date_end")
+
+    def save(self, lat, lon, commit=True):
+        event = super(NewEventForm, self).save(commit=False)
+        event.lat = lat
+        event.lon = lon
+        if commit:
+            event.save()
+        return event
+
+class NewPlaceForm(forms.ModelForm):
+    class Meta:
+        model = Place
+        fields = ("title", "text")
+
+    def save(self, lat, lon, commit=True):
+        place = super(NewPlaceForm, self).save(commit=False)
+        place.lat = lat
+        place.lon = lon
+        if commit:
+            place.save()
+        return place
+
+
 class PreferencesForm(forms.ModelForm):
    class Meta:
        model = Profile

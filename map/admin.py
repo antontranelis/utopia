@@ -1,12 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import Event, Place, Profile, UserPosition, Tag
+from .models import Event, Place, Profile, Tag
 # Register your models here.
 
 admin.site.register(Event)
 admin.site.register(Place)
-admin.site.register(UserPosition)
 
 
 class ProfileInline(admin.StackedInline):

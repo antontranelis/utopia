@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Event, Place, UserPosition, Tag
-from .forms import NewUserForm, PreferencesForm
+from .models import Event, Place, Tag, Profile
+from .forms import NewUserForm, NewEventForm, NewPlaceForm, PreferencesForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -9,9 +9,37 @@ from django.contrib import messages
 # Create your views here.
 
 def map(request):
+    if request.method == "POST":
+        if request.POST['type'] == "user_position":
+            profile = Profile.objects.get(user=request.user)
+            profile.lat = float(request.POST['lat'])
+            profile.lon = float(request.POST['lng'])
+            profile.save()
+            messages.success(request, f"You added your position to the map")
+            return redirect("map:map")
+        if request.POST['type'] == "event":
+            form = NewEventForm(request.POST)
+        if request.POST['type'] == "place":
+            form = NewPlaceForm(request.POST)
+        if form.is_valid():
+            lat = request.POST['lat']
+            lon = request.POST['lon']
+            form.save(lat,lon)
+            if request.POST['type'] == "event":
+                messages.success(request, f"New event created")
+            if request.POST['type'] == "place":
+                messages.success(request, f"New place created")
+            return redirect("map:map")
+        else:
+            for msg in form.error_messages:
+                messages.error(request, f"{msg}: {form.error_messages[msg]}")
+
+
+    eventForm = NewEventForm
+    placeForm = NewPlaceForm
     return render(request=request,
                   template_name="map/map.html",
-                  context={"events": Event.objects.all, "places": Place.objects.all, "user_positions": UserPosition.objects.all})
+                  context={"events": Event.objects.all, "places": Place.objects.all, "user_profiles": Profile.objects.all(), "event_form":eventForm, "place_form":placeForm})
 
 def profile(request):
     user = request.user

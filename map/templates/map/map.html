@@ -12,6 +12,14 @@
     width: 100%;
     height: calc(100vh - 65px);
   }
+
+  .leaflet-container.crosshair-cursor-enabled {
+    cursor:crosshair;
+  }
+
+  .extra-marker.extra-marker-svg i {
+    width: 36px !important;
+  }
 </style>
 <body>
     {% leaflet_map "yourmap" %}
@@ -20,39 +28,84 @@
         <i class="large material-icons">add</i>
       </a>
       <ul>
-        <li><a class="btn-floating red darken-3" title="Share my Position"><i class="material-icons">account_circle</i></a></li>
-        <li><a class="btn-floating yellow darken-3" title="New Event"><i class="material-icons">event</i></a></li>
-        <li><a class="btn-floating green darken-3" title="New Location"><i class="material-icons">location_on</i></a></li>
-        <li><a class="btn-floating blue darken-3" title="New Small Ad"><i class="material-icons">local_offer</i></a></li>
+        <li><a class="btn-floating red darken-3" title="Share my Position" onclick="selectUserPosition()"><i style="font-size: 18px;" class="fa fa-user"></i></a></li>
+        <li><a class="btn-floating yellow darken-3" title="New Event" onclick="selectEventPosition()"><i style="font-size: 18px;" class="fa fa-calendar-alt"></i></a></li>
+        <li><a class="btn-floating green darken-3" title="New Place" onclick="selectPlacePosition()"><i class="material-icons">location_on</i></a></li>
+        <!-- <li><a class="btn-floating blue darken-3" title="New Small Ad"><i class="material-icons">local_offer</i></a></li> -->
       </ul>
     </div>
 </body>
 <script>
 
-  // init Buttons
-  document.addEventListener('DOMContentLoaded', function() {
-  var elems = document.querySelectorAll('.fixed-action-btn');
-  var instances = M.FloatingActionButton.init(elems);
+    // -- init map --
 
-
-
-});
     var map = null;
     var popup = L.popup({minWidth: 300, closeOnClick: false, keepInView: true});
+
+    var events = L.layerGroup();
+    var places = L.layerGroup();
+    var positions = L.layerGroup();
+
+
+
+    var yellowMarker = L.ExtraMarkers.icon({
+      icon: 'fa-calendar-alt',
+      markerColor: '#f9a825',
+      shape: 'circle',
+      prefix: 'fa',
+      svg: true
+    });
+    var greenMarker = L.ExtraMarkers.icon({
+      icon: 'fa-circle',
+      markerColor: '#2E7D32',
+      shape: 'circle',
+      prefix: 'fa',
+      svg: true
+    });
+    var redMarker = L.ExtraMarkers.icon({
+      icon: 'fa-user',
+      markerColor: '#C62828',
+      shape: 'circle',
+      prefix: 'fa',
+      svg: true
+    });
+    // -- place markers
 
     window.addEventListener("map:init", function (e) {
         map = e.detail.map;
         {% for e in events %}
-          L.marker([{{e.lat}}, {{e.lon}}]).bindPopup(`{% include "map/includes/popups/event.html" %}`).addTo(map);
+          L.marker([{{e.lat}}, {{e.lon}}],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(events);
         {% endfor %}
         {% for p in places %}
-          L.marker([{{p.lat}}, {{p.lon}}]).bindPopup(`{% include "map/includes/popups/place.html" %}`).addTo(map);
+          L.marker([{{p.lat}}, {{p.lon}}],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(places);
         {% endfor %}
-        {% for up in user_positions %}
-          L.marker([{{up.lat}}, {{up.lon}}]).bindPopup(`{% include "map/includes/popups/profile.html" %}`).addTo(map);
+        {% for up in user_profiles %}
+          L.marker([{{up.lat}}, {{up.lon}}],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(positions);
         {% endfor %}
+
+        events.addTo(map);
+        places.addTo(map);
+        positions.addTo(map);
+
+        var overlayMaps = {
+          "Events": events,
+          "Places": places,
+          "Positions": positions,
+        };
+
+        L.control.layers(null, overlayMaps).addTo(map);
+
         map.on('dblclick', showCoordinates);
+
     }, false);
+
+
+
+
+
+
+
+    // -- show coodinates on doubleclick
 
     function showCoordinates(e) {
       popup
@@ -61,18 +114,80 @@
 			.openOn(map);
     }
 
+    // -- new event --
 
-    function showPopUp(e) {
-      	position= e.latlng;
-        popup
-          .setLatLng(e.latlng)
-          .setContent(`{% include "map/includes/popups/new_event.html" %}`)
-          .openOn(map);
-          var elems = document.querySelectorAll('select');
-          var instances = M.FormSelect.init(elems);
-          elems = document.querySelectorAll('.datepicker');
-          instances = M.Datepicker.init(elems, {container:'body'});
+    function selectEventPosition() {
+      M.toast({html: "Select Position!", classes: 'brown rounded', displayLength:4000});
+      L.DomUtil.addClass(map._container,'crosshair-cursor-enabled');
+      map.on('click', newEventPopUp);
     }
+
+    function newEventPopUp(e) {
+      L.DomUtil.removeClass(map._container,'crosshair-cursor-enabled');
+      map.off('click');
+      position= e.latlng;
+      popup
+        .setLatLng(e.latlng)
+        .setContent(`{% include "map/includes/popups/new_event.html" %}`)
+        .openOn(map);
+    }
+
+    // -- new place --
+
+    function selectPlacePosition() {
+      M.toast({html: "Select Position!", classes: 'brown rounded', displayLength:4000});
+      L.DomUtil.addClass(map._container,'crosshair-cursor-enabled');
+      map.on('click', newPlacePopUp);
+    }
+
+    function newPlacePopUp(e) {
+      L.DomUtil.removeClass(map._container,'crosshair-cursor-enabled');
+      map.off('click');
+      position= e.latlng;
+      popup
+        .setLatLng(e.latlng)
+        .setContent(`{% include "map/includes/popups/new_place.html" %}`)
+        .openOn(map);
+    }
+
+    // -- new user position ---
+
+    function selectUserPosition() {
+      M.toast({html: "Select Position!", classes: 'brown rounded', displayLength:4000});
+      L.DomUtil.addClass(map._container,'crosshair-cursor-enabled');
+      map.on('click', postUserPosition);
+    }
+
+    function postUserPosition(e) {
+      L.DomUtil.removeClass(map._container,'crosshair-cursor-enabled');
+      map.off('click');
+      var url = "/";
+      var params = `lat=${e.latlng.lat.toFixed(6)}&lng=${e.latlng.lng.toFixed(6)}&type=user_position&csrfmiddlewaretoken={{ csrf_token }}`;
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+
+      //Send the proper header information along with the request
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.addEventListener("load", complete);
+      xhr.addEventListener("error", failed);
+      xhr.send(params);
+      }
+       function complete(evt) {
+           location.reload();
+       }
+       function failed(evt) {
+          M.toast({html: "An error occurred while sending your position", classes: 'red rounded', displayLength:4000});
+       }
+
+
+    // ----- init materialize buttons ----- \\
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.fixed-action-btn');
+      var instances = M.FloatingActionButton.init(elems);
+    });
+
+
 
 </script>
 {% endblock %}

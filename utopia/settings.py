@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'map.apps.MapConfig',
-    'leaflet'
+    'leaflet',
+    'fontawesome_5',
 ]
 
 MIDDLEWARE = [
@@ -136,5 +137,13 @@ LEAFLET_CONFIG = {
     'MIN_ZOOM': 3,
     'MAX_ZOOM': 18,
     'DEFAULT_PRECISION': 6,
-    'ATTRIBUTION_PREFIX': 'Powered by django-leaflet'
+    'ATTRIBUTION_PREFIX': 'Powered by django-leaflet',
+    'PLUGINS': {
+        'ExtraMarkers': {
+            'css': 'map/css/leaflet.extra-markers.min.css',
+            'js': 'map/js/leaflet.extra-markers.min.js',
+            'auto-include': True,
+        },
+    },
+
 }
