@@ -128,7 +128,7 @@
           "Positions": positions,
         };
 
-        layercontrol = L.control.layers(null, overlayMaps, {collapsed:false}).addTo(map);
+        layercontrol = L.control.layers(null, overlayMaps, {collapsed:false, position: "bottomleft"}).addTo(map);
         layercontrol.getContainer().childNodes[1].childNodes[2].childNodes.forEach((item, i) => {
           L.DomUtil.addClass(item.childNodes[0].childNodes[0],'reset-checkbox');
           L.DomUtil.addClass(item.childNodes[0].childNodes[1],'text-white')
