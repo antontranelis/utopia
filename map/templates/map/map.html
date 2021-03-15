@@ -46,12 +46,14 @@
   .leaflet-control-layers-expanded, .leaflet-control-layers{
     background-color: #795548;
     border: 2px solid #795548 !important;
-    margin-bottom: calc(50vh - 90px) !important;
+    margin-bottom: calc(50vh - 82px) !important;
     margin-left: 0 !important;
     border-radius: 0px 5px 5px 0px !important;
   }
 
-
+#yourmap {
+  z-index: 1;
+}
 </style>
 <body>
     {% leaflet_map "yourmap" %}
@@ -60,7 +62,9 @@
         <i class="large material-icons">add</i>
       </a>
       <ul>
+        {% if user.is_authenticated %}
         <li><a class="btn-floating red darken-3" title="Share my Position" onclick="selectUserPosition()"><i style="font-size: 18px;" class="fa fa-user"></i></a></li>
+        {% endif %}
         <li><a class="btn-floating yellow darken-3" title="New Event" onclick="selectEventPosition()"><i style="font-size: 18px;" class="fa fa-calendar-alt"></i></a></li>
         <li><a class="btn-floating green darken-3" title="New Place" onclick="selectPlacePosition()"><i class="material-icons">location_on</i></a></li>
         <!-- <li><a class="btn-floating blue darken-3" title="New Small Ad"><i class="material-icons">local_offer</i></a></li> -->
@@ -171,6 +175,8 @@
         .setLatLng(e.latlng)
         .setContent(`{% include "map/includes/popups/new_event.html" %}`)
         .openOn(map);
+        var elems = document.querySelectorAll(".datepicker");
+        var instances = M.Datepicker.init(elems, {container: "body", autoClose: true, format: 'yyyy-mm-dd'});
     }
 
     // -- new place --

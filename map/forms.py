@@ -21,12 +21,19 @@ class NewUserForm(UserCreationForm):
 class NewEventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ("title", "text", "date_start", "date_end")
+        fields = ("title", "text", "date_start", "date_end", "tags")
+        widgets = {
+             'text': forms.Textarea(attrs={'class': 'materialize-textarea'}),
+             'tags': forms.CheckboxSelectMultiple(attrs={'queryset': Tag.objects.all(), 'class': 'reset-checkbox'}),
+             'date_start': forms.DateInput(attrs={'class': 'datepicker'}),
+             'date_end': forms.DateInput(attrs={'class': 'datepicker'}),
+         }
 
-    def save(self, lat, lon, commit=True):
+    def save(self, lat, lon, creator, commit=True):
         event = super(NewEventForm, self).save(commit=False)
         event.lat = lat
         event.lon = lon
+        event.creator = creator
         if commit:
             event.save()
         return event
@@ -34,12 +41,17 @@ class NewEventForm(forms.ModelForm):
 class NewPlaceForm(forms.ModelForm):
     class Meta:
         model = Place
-        fields = ("title", "text")
+        fields = ("title", "text", "tags")
+        widgets = {
+             'text': forms.Textarea(attrs={'class': 'materialize-textarea'}),
+             'tags': forms.CheckboxSelectMultiple(attrs={'queryset': Tag.objects.all(), 'class': 'reset-checkbox'}),
+         }
 
-    def save(self, lat, lon, commit=True):
+    def save(self, lat, lon, creator, commit=True):
         place = super(NewPlaceForm, self).save(commit=False)
         place.lat = lat
         place.lon = lon
+        place.creator = creator
         if commit:
             place.save()
         return place

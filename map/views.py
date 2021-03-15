@@ -24,7 +24,11 @@ def map(request):
         if form.is_valid():
             lat = request.POST['lat']
             lon = request.POST['lon']
-            form.save(lat,lon)
+            if request.user.is_authenticated:
+                creator = request.user
+            else:
+                creator = None
+            form.save(lat, lon, creator)
             if request.POST['type'] == "event":
                 messages.success(request, f"New event created")
             if request.POST['type'] == "place":
