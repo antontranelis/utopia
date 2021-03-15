@@ -21,24 +21,6 @@
     width: 36px !important;
   }
 
-  [type="checkbox"].reset-checkbox,
-  [type="checkbox"].reset-checkbox:checked,
-  [type="checkbox"].reset-checkbox:not(checked) {
-    opacity: 1;
-    position: relative;
-  }
-
-  [type="checkbox"].reset-checkbox+span::before,
-  [type="checkbox"].reset-checkbox+span::after,
-  [type="checkbox"].reset-checkbox:checked+span::before,
-  [type="checkbox"].reset-checkbox:checked+span::after {
-    display: none;
-  }
-
-  [type="checkbox"].reset-checkbox+span:not(.lever) {
-    padding-left: 10px;
-  }
-
   .text-white {
     color: #fff;
   }
@@ -51,9 +33,6 @@
     border-radius: 0px 5px 5px 0px !important;
   }
 
-#yourmap {
-  z-index: 1;
-}
 </style>
 <body>
     {% leaflet_map "yourmap" %}
@@ -76,7 +55,7 @@
     // -- init map --
 
     var map = null;
-    var popup = L.popup({minWidth: 300, closeOnClick: false, keepInView: true});
+    var popup = L.popup({minWidth: 240, closeOnClick: false, keepInView: false});
 
     var events = L.layerGroup();
     var places = L.layerGroup();
@@ -117,7 +96,9 @@
           L.marker([{{p.lat}}, {{p.lon}}],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(places);
         {% endfor %}
         {% for up in user_profiles %}
-          L.marker([{{up.lat}}, {{up.lon}}],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(positions);
+          {% if up.lat %}
+            L.marker([{{up.lat}}, {{up.lon}}],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(positions);
+          {% endif %}
         {% endfor %}
 
     // -- add layers to map

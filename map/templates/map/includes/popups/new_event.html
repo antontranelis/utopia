@@ -1,6 +1,6 @@
 <form method="POST">
 {% csrf_token %}
-{{event_form.as_p}}
+{{event_form}}
   <input type="number" id="id_lon" name="lon" style="display: none;" step="any" value="${e.latlng.lng.toFixed(6)}">
   <input type="number" id="id_lat" name="lat" style="display: none;" step="any" value="${e.latlng.lat.toFixed(6)}">
   <input id="type" name="type" style="display: none;" step="any" value="event">
