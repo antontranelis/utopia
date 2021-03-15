@@ -20,6 +20,35 @@
   .extra-marker.extra-marker-svg i {
     width: 36px !important;
   }
+
+  [type="checkbox"].reset-checkbox,
+  [type="checkbox"].reset-checkbox:checked,
+  [type="checkbox"].reset-checkbox:not(checked) {
+    opacity: 1;
+    position: relative;
+  }
+
+  [type="checkbox"].reset-checkbox+span::before,
+  [type="checkbox"].reset-checkbox+span::after,
+  [type="checkbox"].reset-checkbox:checked+span::before,
+  [type="checkbox"].reset-checkbox:checked+span::after {
+    display: none;
+  }
+
+  [type="checkbox"].reset-checkbox+span:not(.lever) {
+    padding-left: 10px;
+  }
+
+  .text-white {
+    color: #fff;
+  }
+
+  .leaflet-control-layers-expanded, .leaflet-control-layers{
+    background-color: #795548;
+    border: 2px solid #795548 !important;
+  }
+
+
 </style>
 <body>
     {% leaflet_map "yourmap" %}
@@ -69,7 +98,8 @@
       prefix: 'fa',
       svg: true
     });
-    // -- place markers
+
+    // -- place markers in layers
 
     window.addEventListener("map:init", function (e) {
         map = e.detail.map;
@@ -83,6 +113,8 @@
           L.marker([{{up.lat}}, {{up.lon}}],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(positions);
         {% endfor %}
 
+    // -- add layers to map
+
         events.addTo(map);
         places.addTo(map);
         positions.addTo(map);
@@ -93,7 +125,13 @@
           "Positions": positions,
         };
 
-        L.control.layers(null, overlayMaps).addTo(map);
+        layercontrol = L.control.layers(null, overlayMaps, {collapsed:false}).addTo(map);
+        layercontrol.getContainer().childNodes[1].childNodes[2].childNodes.forEach((item, i) => {
+          L.DomUtil.addClass(item.childNodes[0].childNodes[0],'reset-checkbox');
+          L.DomUtil.addClass(item.childNodes[0].childNodes[1],'text-white')
+        });
+
+    // -- set event listener
 
         map.on('dblclick', showCoordinates);
 
