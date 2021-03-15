@@ -4,6 +4,7 @@ from .models import Event, Place, Tag, Profile
 from .forms import NewUserForm, NewEventForm, NewPlaceForm, PreferencesForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 # Create your views here.
@@ -57,6 +58,8 @@ def register(request):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
+            profile = Profile(user=user)
+            profile.save()
             messages.success(request, f"New account created: {username}")
             login(request, user)
             return redirect("map:map")
@@ -93,10 +96,14 @@ def login_request(request):
     form = AuthenticationForm()
     return render(request, "map/login.html", context={"form":form})
 
+@login_required
 def preferences(request):
     if request.method == "POST":
-        form = PreferencesForm(request.POST)
+        profile = Profile.objects.get(user=request.user)
+        form = PreferencesForm(instance=profile, data=request.POST)
         if form.is_valid():
+            form.save()
+            messages.success(request, f"Preferences Updatet for {profile.user.username}")
             return redirect("map:map")
 
 

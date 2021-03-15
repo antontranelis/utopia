@@ -1,0 +1,17 @@
+[type="checkbox"].reset-checkbox,
+[type="checkbox"].reset-checkbox:checked,
+[type="checkbox"].reset-checkbox:not(checked) {
+  opacity: 1;
+  position: relative;
+}
+
+[type="checkbox"].reset-checkbox+span::before,
+[type="checkbox"].reset-checkbox+span::after,
+[type="checkbox"].reset-checkbox:checked+span::before,
+[type="checkbox"].reset-checkbox:checked+span::after {
+  display: none;
+}
+
+[type="checkbox"].reset-checkbox+span:not(.lever) {
+  padding-left: 10px;
+}

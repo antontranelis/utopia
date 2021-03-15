@@ -60,9 +60,9 @@ class NewPlaceForm(forms.ModelForm):
 class PreferencesForm(forms.ModelForm):
    class Meta:
        model = Profile
-       fields = ['tags','avatar']
+       fields = ['tags']
        widgets = {
-            'tags': forms.CheckboxSelectMultiple(attrs={'queryset': Tag.objects.all()}),
+             'tags': forms.CheckboxSelectMultiple(attrs={'queryset': Tag.objects.all(), 'class': 'reset-checkbox'}),
         }
 
     #name = forms.CharField(max_length=100)
