@@ -1,14 +1,20 @@
 {% load static %}
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="/preferences">Preferences</a></li>
+  <li><a href="/logout">Logout</a></li>
+</ul>
 <nav>
   <div class="nav-wrapper brown">
     <a style="margin-left:10px" href="/" class="brand-logo left"><b>utopia</b></a>
     <ul id="nav-mobile" class="right hide-on-down">
+
       {% if user.is_authenticated %}
-           <li><a href="/profile">{{user.username|title}}</a></li>
-           <li><a href="/logout">Logout</a></li>
       {% else %}
           <li><a href="/login">Login</a></li>
           <li><a href="/register">Register</a></li>
+      {% endif %}
+      {% if user.is_authenticated %}
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">{{user.username|title}}<i style="width: 24px;" class="material-icons right">arrow_drop_down</i></a></li>
       {% endif %}
     </ul>
     {% if user.is_authenticated %}
@@ -18,3 +24,9 @@
     {% endif %}
   </div>
 </nav>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelectorAll(".dropdown-trigger");
+    M.Dropdown.init(el,{coverTrigger:false, hover: true});
+  });
+</script>

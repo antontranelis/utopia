@@ -15,3 +15,15 @@
 [type="checkbox"].reset-checkbox+span:not(.lever) {
   padding-left: 10px;
 }
+
+body {
+  overflow: hidden;
+}
+
+.dropdown-trigger {
+  outline: none;
+}
+
+.dropdown-content li a {
+  font-size: 1rem;
+}
