@@ -136,6 +136,7 @@ LEAFLET_CONFIG = {
     'DEFAULT_ZOOM': 8,
     'MIN_ZOOM': 3,
     'MAX_ZOOM': 18,
+    'RESET_VIEW': False,
     'DEFAULT_PRECISION': 6,
     'ATTRIBUTION_PREFIX': 'Powered by django-leaflet',
     'PLUGINS': {

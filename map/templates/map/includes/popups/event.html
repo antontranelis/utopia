@@ -8,18 +8,23 @@
       <p style="font-size: 180%; margin:0px;">{{e.title}}</p>
       <br>
     </div>
-    <div style="display: flex; align-items: center; margin-top:7px;" class="col s6">
-      <i style="color: #aaa" class="material-icons prefix">event</i>
+    <div style="display: flex; align-items: center; justify-content: space-between;" class="col s6">
       <div>
-        <p style="margin:0px;">&nbsp;{{e.date_start | date:"F d Y"}}</p>
+        <i style="color: #aaa; vertical-align:middle;" class="material-icons prefix">event</i>
+        <span style="margin:0px; vertical-align:middle;">&nbsp;{{e.date_start | date:"F d Y"}}</span>
+      </div>
+      {% if e.date_start != e.date_end %}
+      <span style="margin-right: -5px;">-</span>
+    </div>
+    <div style="display: flex; align-items: center;" class="col s6">
+      <div>
+        <i style="color: #aaa; vertical-align:middle;" class="material-icons prefix">event</i>
+        <span style="margin:0px; vertical-align:middle;">&nbsp;{{e.date_end | date:"F d Y"}}</span>
       </div>
     </div>
-    <div style="display: flex; align-items: center; margin-top:7px;" class="col s6">
-      <i style="color: #aaa" class="material-icons prefix">alarm</i>
-      <div>
-        <p style="margin:0px;">&nbsp;{{e.date_start | time:"H:i"}}</p>
-      </div>
+    {% else%}
     </div>
+    {% endif %}
     <div class="col s12">
       <p margin:0px;">{{e.text}}</p>
       {% for tag in e.tags.all %}
