@@ -100,10 +100,10 @@ def login_request(request):
 def preferences(request):
     if request.method == "POST":
         profile = Profile.objects.get(user=request.user)
-        form = PreferencesForm(instance=profile, data=request.POST)
+        form = PreferencesForm(instance=profile, data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, f"Preferences Updatet for {profile.user.username}")
+            messages.success(request, f"Preferences updated for {profile.user.username}")
             return redirect("map:map")
 
 

@@ -91,7 +91,7 @@ class Profile(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag)
-    avatar = models.ImageField()
+    avatar = models.ImageField(upload_to='images/', blank=True)
     lat = models.FloatField(null=True)
     lon = models.FloatField(null=True)
     created_at = models.DateTimeField(auto_now=True)
