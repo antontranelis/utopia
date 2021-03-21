@@ -1,40 +1,46 @@
-
-  <form style="overflow: visible;">
+  <form action="" method="POST">
     {% csrf_token %}
     <div class="row">
       <div class="col s12">
         <div class="input-field">
-          <input id="title" type="text" class="">
-          <label for="title">Title</label>
+          <input id="id_title" name="title" type="text" class="">
+          <label for="id_title">Title</label>
         </div>
-        <div class="input-field">
-          <textarea id="textarea1" class="materialize-textarea"></textarea>
-          <label for="textarea1">Description</label>
+      </div>
+      <div class="col s12">
+        <div class="input-field" style="margin:0">
+          <textarea id="id_text" name="text" class="materialize-textarea"></textarea>
+          <label for="id_text">Text</label>
         </div>
-        <div class="input-field">
-          <i style="color: #aaa" class="material-icons prefix">alarm</i>
-          <input id="date" type="text" class="datepicker">
+      </div>
+      <div class="col s6">
+        <div class="input-field" style="margin:0">
+          <i style="color: #aaa" class="material-icons prefix">event</i>
+          <input id="id_date_start" name="date_start" type="text" class="datepicker">
         </div>
-        <div class="input-field">
-          <i style="color: #aaa" class="material-icons prefix">share</i>
-          <select multiple>
-            <option value="1" selected>public</option>
-            <option value="2">Group X</option>
-            <option value="3">Friend Y</option>
-          </select>
+      </div>
+      <div class="col s6">
+        <div class="input-field" style="margin:0">
+          <i style="color: #aaa" class="material-icons prefix">event</i>
+          <input id="id_date_end" name="date_end" type="text" class="datepicker">
         </div>
-        <div class="input-field">
-          <i style="color: #aaa" class="material-icons prefix">edit</i>
-          <select multiple>
-            <option value="1" selected>just me</option>
-            <option value="2">Group</option>
-            <option value="3">Friend XY</option>
-            <option value="3">Everyone</option>
-          </select>
-        </div>
-        <br>
+      </div>
+      <div class="col s12">
+        <ul id="id_tags" class="reset-checkbox">
+            ${tags.map((item, j) =>
+              `<li><label for="id_tags_${j}"><input type="checkbox" name="tags" value="${item.pk}"  class="reset-checkbox" id="id_tags_${j}">
+                ${item.fields.tag}
+              </label></li>`
+              ).join('')}
+        </ul>
+      </div>
+      <div class="col s12">
+        <input type="number" id="lon" name="lon" style="display: none;" step="any">
+        <input type="number" id="lat" name="lat" style="display: none;" step="any">
+        <input id="type" name="type" style="display: none;" step="any" value="event">
+        <input id="event_id" name="event_id" style="display: none;" step="any">
         <div style="display: flex;justify-content: center;">
-          <a href="/" class="waves-effect waves-light btn brown" style="color:#fff" type="submit">Save</a>
+          <button class="waves-effect waves-light btn brown" style="color:#fff" type="Submit">Save</button>
         </div>
         <br>
       </div>

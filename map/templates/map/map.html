@@ -154,7 +154,7 @@
       let event= {}
       new_popup
         .setLatLng(e.latlng)
-        .setContent(`{% include "map/includes/popups/new_event.html" %}`)
+        .setContent(`{% include "map/includes/popups/new_event1.html" %}`)
         .openOn(map);
       document.getElementById("lat").value = e.latlng.lat.toFixed(6);
       document.getElementById("lon").value = e.latlng.lng.toFixed(6);
@@ -176,8 +176,8 @@
       document.getElementById("id_text").value = event.fields.text;
       document.getElementById("id_date_start").value = new Date(event.fields.date_start).toISOString().substring(0, 10);
       document.getElementById("id_date_end").value = new Date(event.fields.date_end).toISOString().substring(0, 10);
-      event.fields.tags.forEach((item, i) => {
-        document.getElementById(`id_tags_${item-1}`).setAttribute("checked", "");
+      tags.forEach((item, i) => {
+        if(event.fields.tags.includes(item.pk)) document.getElementById(`id_tags_${i}`).setAttribute("checked", "");
       });
       document.getElementById("lat").value = event.fields.lat.toFixed(6);
       document.getElementById("lon").value = event.fields.lon.toFixed(6);
@@ -220,8 +220,8 @@
         .openOn(map);
       document.getElementById("id_title").value = place.fields.title;
       document.getElementById("id_text").value = place.fields.text;
-      place.fields.tags.forEach((item, i) => {
-        document.getElementById(`id_tags_${item-1}`).setAttribute("checked", "");
+      tags.forEach((item, i) => {
+        if(place.fields.tags.includes(item.pk)) document.getElementById(`id_tags_${i}`).setAttribute("checked", "");
       });
       document.getElementById("lat").value = place.fields.lat.toFixed(6);
       document.getElementById("lon").value = place.fields.lon.toFixed(6);
