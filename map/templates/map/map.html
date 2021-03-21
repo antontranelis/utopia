@@ -55,13 +55,17 @@
     // -- init map --
 
     var map = null;
-    var popup = L.popup({minWidth: 240, closeOnClick: false, keepInView: false});
-
-    var events = L.layerGroup();
-    var places = L.layerGroup();
-    var positions = L.layerGroup();
-
-
+    var new_popup = L.popup({minWidth: 300, closeOnClick: false, keepInView: false});
+    var edit_popup = L.popup({offset: [1,-25], minWidth: 300, keepInView: true});
+    var current_popup_event;
+    var event_layer = L.layerGroup();
+    var place_layer = L.layerGroup();
+    var position_layer = L.layerGroup();
+    var events = JSON.parse("{{events|escapejs}}");
+    var places = JSON.parse("{{places|escapejs}}");
+  //  var profiles = JSON.parse("{{profiles|escapejs}}");
+    var tags = JSON.parse("{{tags|escapejs}}");
+    console.log(tags);
 
     var yellowMarker = L.ExtraMarkers.icon({
       icon: 'fa-calendar-alt',
@@ -89,28 +93,43 @@
 
     window.addEventListener("map:init", function (e) {
         map = e.detail.map;
-        {% for e in events %}
-          L.marker([{{e.lat}}, {{e.lon}}],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(events);
-        {% endfor %}
-        {% for p in places %}
-          L.marker([{{p.lat}}, {{p.lon}}],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(places);
-        {% endfor %}
+        events.forEach((item, i) => {
+          var marker = L.marker([item.fields.lat, item.fields.lon],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(event_layer);
+          item.marker = marker;
+        });
+        places.forEach((item, i) => {
+          var marker = L.marker([item.fields.lat, item.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(event_layer);
+          item.marker = marker;
+        });
         {% for up in user_profiles %}
           {% if up.lat %}
-            L.marker([{{up.lat}}, {{up.lon}}],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(positions);
+            L.marker([{{up.lat}}, {{up.lon}}],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(position_layer);
           {% endif %}
         {% endfor %}
 
+        console.log(events);
+
+        map.on('popupopen', function(e) {
+          // -- init popup popdowns
+          var el = document.querySelectorAll(".popup-dropdown-trigger");
+          M.Dropdown.init(el,{coverTrigger:false, hover: false, constrainWidth: false});
+          // -- cache popup-data
+          current_popup_event = e;
+
+          console.log(current_popup_event);
+        });
+
+
     // -- add layers to map
 
-        events.addTo(map);
-        places.addTo(map);
-        positions.addTo(map);
+        event_layer.addTo(map);
+        place_layer.addTo(map);
+        position_layer.addTo(map);
 
         var overlayMaps = {
-          "Events": events,
-          "Places": places,
-          "Positions": positions,
+          "Events": event_layer,
+          "Places": place_layer,
+          "Folks": position_layer,
         };
 
         layercontrol = L.control.layers(null, overlayMaps, {collapsed:false, position: "bottomleft"}).addTo(map);
@@ -119,26 +138,7 @@
           L.DomUtil.addClass(item.childNodes[0].childNodes[1],'text-white')
         });
 
-    // -- set event listener
-
-        map.on('dblclick', showCoordinates);
-
     }, false);
-
-
-
-
-
-
-
-    // -- show coodinates on doubleclick
-
-    function showCoordinates(e) {
-      popup
-			.setLatLng(e.latlng)
-			.setContent("You clicked the map at " + e.latlng.toString())
-			.openOn(map);
-    }
 
     // -- new event --
 
@@ -151,15 +151,42 @@
     function newEventPopUp(e) {
       L.DomUtil.removeClass(map._container,'crosshair-cursor-enabled');
       map.off('click');
-      position= e.latlng;
-      popup
+      let event= {}
+      new_popup
         .setLatLng(e.latlng)
         .setContent(`{% include "map/includes/popups/new_event.html" %}`)
         .openOn(map);
-        var elems = document.querySelectorAll(".datepicker");
-        var instances = M.Datepicker.init(elems, {container: "body", autoClose: true, format: 'yyyy-mm-dd'});
+      document.getElementById("lat").value = e.latlng.lat.toFixed(6);
+      document.getElementById("lon").value = e.latlng.lng.toFixed(6);
+      initDatepicker();
     }
 
+    function editEvent() {
+      current_popup_event.popup.remove();
+      var event = events.filter(evt => {
+        return evt.marker == current_popup_event.popup._source;
+      })
+      event=event[0];
+
+      edit_popup
+        .setLatLng(L.latLng(event.fields.lat,event.fields.lon))
+        .setContent(`{% include "map/includes/popups/new_event.html" %}`)
+        .openOn(map);
+      document.getElementById("id_title").value = event.fields.title;
+      document.getElementById("id_text").value = event.fields.text;
+      document.getElementById("id_date_start").value = new Date(event.fields.date_start).toISOString().substring(0, 10);
+      document.getElementById("id_date_end").value = new Date(event.fields.date_end).toISOString().substring(0, 10);
+      event.fields.tags.forEach((item, i) => {
+        document.getElementById(`id_tags_${item-1}`).setAttribute("checked", "");
+      });
+      document.getElementById("lat").value = event.fields.lat.toFixed(6);
+      document.getElementById("lon").value = event.fields.lon.toFixed(6);
+      document.getElementById("event_id").value = event.pk;
+
+
+      initDatepicker();
+      M.textareaAutoResize(document.getElementById("id_text"));
+    }
     // -- new place --
 
     function selectPlacePosition() {
@@ -172,10 +199,35 @@
       L.DomUtil.removeClass(map._container,'crosshair-cursor-enabled');
       map.off('click');
       position= e.latlng;
-      popup
+      new_popup
         .setLatLng(e.latlng)
         .setContent(`{% include "map/includes/popups/new_place.html" %}`)
         .openOn(map);
+      document.getElementById("lat").value = e.latlng.lat.toFixed(6);
+      document.getElementById("lon").value = e.latlng.lng.toFixed(6);
+    }
+
+    function editPlace(e) {
+      current_popup_event.popup.remove();
+      var place = places.filter(pla => {
+        return pla.marker == current_popup_event.popup._source;
+      })
+      place=place[0];
+
+      edit_popup
+        .setLatLng(L.latLng(place.fields.lat, place.fields.lon))
+        .setContent(`{% include "map/includes/popups/new_place.html" %}`)
+        .openOn(map);
+      document.getElementById("id_title").value = place.fields.title;
+      document.getElementById("id_text").value = place.fields.text;
+      place.fields.tags.forEach((item, i) => {
+        document.getElementById(`id_tags_${item-1}`).setAttribute("checked", "");
+      });
+      document.getElementById("lat").value = place.fields.lat.toFixed(6);
+      document.getElementById("lon").value = place.fields.lon.toFixed(6);
+      document.getElementById("place_id").value = place.pk;
+
+      M.textareaAutoResize(document.getElementById("id_text"));
     }
 
     // -- new user position ---
@@ -208,6 +260,14 @@
        }
 
 
+    function getTagText(id) {
+      var tag = tags.filter(item => {
+              return item.pk == id;
+            })
+      return tag[0].fields.tag;
+    }
+
+
     // ----- init materialize buttons ----- \\
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -215,7 +275,10 @@
       var instances = M.FloatingActionButton.init(elems);
     });
 
-
+    function initDatepicker() {
+      var elems = document.querySelectorAll(".datepicker");
+      var instances = M.Datepicker.init(elems, {container: "body", autoClose: true, format: 'yyyy-mm-dd'});
+    }
 
 </script>
 {% endblock %}

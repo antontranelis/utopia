@@ -141,8 +141,8 @@ LEAFLET_CONFIG = {
     'ATTRIBUTION_PREFIX': 'Powered by django-leaflet',
     'PLUGINS': {
         'ExtraMarkers': {
-            'css': 'map/css/leaflet.extra-markers.min.css',
-            'js': 'map/js/leaflet.extra-markers.min.js',
+            'css': 'map/vendors/leaflet.extra-markers/css/leaflet.extra-markers.min.css',
+            'js': 'map/vendors/leaflet.extra-markers/js/leaflet.extra-markers.min.js',
             'auto-include': True,
         },
     },

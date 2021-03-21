@@ -1,18 +1,24 @@
 
 {% load static %}
 
-
-
+<!-- Dropdown Structure -->
+  <ul id='popup_dropdown' class='dropdown-content'>
+    <li><a onclick="editPlace()"><i class="material-icons prefix">edit</i></a></li>
+    <li><a href="#!"><i class="material-icons prefix">delete</i></a></li>
+  </ul>
   <div class="row">
-    <div class="col s12">
-      <p style="font-size: 180%; margin:0px;">{{p.title}}</p>
+    <div class="col s11">
+      <p style="font-size: 180%; margin-bottom:0px; margin-top:8px;">${item.fields.title}</p>
+    </div>
+    <div class="col s1">
+      <a class="dropdown-trigger popup-dropdown-trigger" data-target='popup_dropdown'><i style="margin-top: 12px;" class="material-icons">more_vert</i></a>
     </div>
     <div class="col s12">
-      <p margin:0px;">{{p.text}}</p>
-      {% for tag in p.tags.all %}
-      <div class="chip">
-        #{{tag.tag}}
-      </div>
-      {% endfor %}
+      <p>${item.fields.text}</p>
+        ${item.fields.tags.map((item, j) =>
+          `<div class="chip">
+              ${getTagText(item)}
+           </div>`
+          ).join('')}
     </div>
   </div>

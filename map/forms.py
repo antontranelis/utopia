@@ -23,7 +23,7 @@ class NewEventForm(forms.ModelForm):
         model = Event
         fields = ("title", "text", "date_start", "date_end", "tags")
         widgets = {
-             'text': forms.Textarea(attrs={'class': 'materialize-textarea'}),
+             'text': forms.Textarea(attrs={'class': 'materialize-textarea', 'placeholder': '#hash #hash url'}),
              'tags': forms.CheckboxSelectMultiple(attrs={'queryset': Tag.objects.all(), 'class': 'reset-checkbox'}),
              'date_start': forms.DateInput(attrs={'class': 'datepicker'}),
              'date_end': forms.DateInput(attrs={'class': 'datepicker'}),
@@ -35,6 +35,7 @@ class NewEventForm(forms.ModelForm):
         event.lon = lon
         event.creator = creator
         event.save()
+        event.tags.clear()
         for tag in self.cleaned_data['tags']:
             event.tags.add(tag)
         if commit:
@@ -56,6 +57,7 @@ class NewPlaceForm(forms.ModelForm):
         place.lon = lon
         place.creator = creator
         place.save()
+        place.tags.clear()
         for tag in self.cleaned_data['tags']:
             place.tags.add(tag)
         if commit:

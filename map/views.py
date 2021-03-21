@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from django.core import serializers
 # Create your views here.
 
 def map(request):
@@ -19,9 +19,15 @@ def map(request):
             messages.success(request, f"You added your position to the map")
             return redirect("map:map")
         if request.POST['type'] == "event":
-            form = NewEventForm(request.POST)
+            if request.POST['event_id'] != "":
+                form = NewEventForm(instance=Event.objects.get(id=request.POST['event_id']), data=request.POST)
+            else:
+                form = NewEventForm(request.POST)
         if request.POST['type'] == "place":
-            form = NewPlaceForm(request.POST)
+            if request.POST['place_id'] != "":
+                form = NewPlaceForm(instance=Place.objects.get(id=request.POST['place_id']), data=request.POST)
+            else:
+                form = NewPlaceForm(request.POST)
         if form.is_valid():
             lat = request.POST['lat']
             lon = request.POST['lon']
@@ -31,9 +37,15 @@ def map(request):
                 creator = None
             form.save(lat, lon, creator)
             if request.POST['type'] == "event":
-                messages.success(request, f"New event created")
+                if request.POST['event_id'] != "":
+                    messages.success(request, f"Event updated")
+                else:
+                    messages.success(request, f"New event created")
             if request.POST['type'] == "place":
-                messages.success(request, f"New place created")
+                if request.POST['place_id'] != "":
+                    messages.success(request, f"Place updated")
+                else:
+                    messages.success(request, f"New place created")
             return redirect("map:map")
         else:
             for msg in form.error_messages:
@@ -42,9 +54,12 @@ def map(request):
 
     eventForm = NewEventForm
     placeForm = NewPlaceForm
+    eventsJSON = serializers.serialize('json', Event.objects.all())
+    placesJSON = serializers.serialize('json', Place.objects.all())
+    tagsJSON = serializers.serialize('json', Tag.objects.all())
     return render(request=request,
                   template_name="map/map.html",
-                  context={"events": Event.objects.all, "places": Place.objects.all, "user_profiles": Profile.objects.all(), "event_form":eventForm, "place_form":placeForm})
+                  context={"events": eventsJSON, "places": placesJSON, "user_profiles": Profile.objects.all(), "tags": tagsJSON, "event_form":eventForm, "place_form":placeForm})
 
 def profile(request):
     user = request.user

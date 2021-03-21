@@ -1,4 +1,3 @@
-/* fallback */
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
@@ -3993,7 +3992,7 @@ button.btn-floating {
     width: 100%;
     text-align: left; }
     .dropdown-content li:hover, .dropdown-content li.active {
-      background-color: #694a3e; }
+      background-color: #6f4e42; }
     .dropdown-content li:focus {
       outline: none; }
     .dropdown-content li.divider {
@@ -4017,7 +4016,7 @@ button.btn-floating {
       width: 24px; }
 
 body.keyboard-focused .dropdown-content li:focus {
-  background-color: #4f382f; }
+  background-color: #563c33; }
 
 .input-field.col .dropdown-content [type="checkbox"] + label {
   top: 1px;
@@ -5261,7 +5260,7 @@ body.keyboard-focused .select-dropdown.dropdown-content li:focus {
   float: right; }
 
 .select-dropdown li.optgroup {
-  border-top: 1px solid #694a3e; }
+  border-top: 1px solid #6f4e42; }
   .select-dropdown li.optgroup.selected > span {
     color: rgba(0, 0, 0, 0.7); }
   .select-dropdown li.optgroup > span {

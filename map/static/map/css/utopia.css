@@ -24,6 +24,37 @@ body {
   outline: none;
 }
 
+.dropdown-content {
+  min-width: auto !important;
+}
+
 .dropdown-content li a {
   font-size: 1rem;
+  padding: 15px 17px;
+}
+
+.dropdown-content li > a > i {
+    margin: 0 0 0 0 !important;
+    font-size: 20px;
+}
+
+.popup-dropdown-trigger {
+  cursor:pointer;
+  color:#c3c3c3 !important;
+}
+
+.popup-dropdown-trigger:hover {
+  color: #999 !important;
+}
+
+#popup_dropdown li{
+  background-color: #fff !important;
+}
+
+#popup_dropdown li:hover{
+  background-color: #f8f8f8 !important;
+}
+
+#popup_dropdown li a {
+  color: #888 !important;
 }

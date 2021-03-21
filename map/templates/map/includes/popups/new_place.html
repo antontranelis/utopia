@@ -1,8 +1,9 @@
 <form method="POST">
 {% csrf_token %}
 {{place_form}}
-  <input type="number" id="id_lon" name="lon" style="display: none;" step="any" value="${e.latlng.lng.toFixed(6)}">
-  <input type="number" id="id_lat" name="lat" style="display: none;" step="any" value="${e.latlng.lat.toFixed(6)}">
+  <input type="number" id="lon" name="lon" style="display: none;" step="any">
+  <input type="number" id="lat" name="lat" style="display: none;" step="any">
   <input id="type" name="type" style="display: none;" step="any" value="place">
+  <input id="place_id" name="place_id" style="display: none;" step="any">
     <button style="background-color:#795548;" class="btn btn-outline-info" type="submit">Save</button>
 </form>
