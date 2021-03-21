@@ -7,6 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core import serializers
+import datetime
 # Create your views here.
 
 def map(request):
@@ -54,7 +55,7 @@ def map(request):
 
     eventForm = NewEventForm
     placeForm = NewPlaceForm
-    eventsJSON = serializers.serialize('json', Event.objects.all())
+    eventsJSON = serializers.serialize('json', Event.objects.filter(date_end__gte = datetime.date.today()))
     placesJSON = serializers.serialize('json', Place.objects.all())
     tagsJSON = serializers.serialize('json', Tag.objects.all())
     return render(request=request,
