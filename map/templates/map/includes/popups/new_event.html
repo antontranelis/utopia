@@ -1,9 +1,50 @@
-<form method="POST">
-{% csrf_token %}
-{{event_form}}
-  <input type="number" id="lon" name="lon" style="display: none;" step="any">
-  <input type="number" id="lat" name="lat" style="display: none;" step="any">
-  <input id="type" name="type" style="display: none;" step="any" value="event">
-  <input id="event_id" name="event_id" style="display: none;" step="any">
-    <button style="background-color:#795548;" class="btn btn-outline-info" type="submit">Save</button>
+<form action="" method="POST">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col s12">
+      <div class="input-field">
+        <input id="id_title" name="title" type="text" class="">
+        <label for="id_title">Title</label>
+      </div>
+    </div>
+    <div class="col s12">
+      <div class="input-field" style="margin:0">
+        <textarea id="id_text" name="text" class="materialize-textarea"></textarea>
+        <label for="id_text">Text</label>
+      </div>
+    </div>
+    <div class="col s6">
+      <div class="input-field" style="margin:0">
+        <i style="color: #aaa; font-size: 24;" class="material-icons prefix">event</i>
+        <input style="height: 2.7rm;" id="id_date_start" name="date_start" type="text" class="datepicker">
+      </div>
+    </div>
+    <div class="col s6">
+      <div class="input-field" style="margin:0">
+        <i style="color: #aaa; font-size: 24;" class="material-icons prefix">event</i>
+        <input style="height: 2.7rm;" id="id_date_end" name="date_end" type="text" class="datepicker">
+      </div>
+    </div>
+      <ul id="id_tags" class="reset-checkbox">
+        <div class="col s6">
+          <br>
+          ${tags.map((item, j) =>
+            `${j == Math.floor(tags.length/2) ? `</div><div class="col s6"><br>` : ``}
+            <li><label for="id_tags_${j}"><input type="checkbox" name="tags" value="${item.pk}"  class="reset-checkbox" id="id_tags_${j}">
+              ${item.fields.tag}
+            </label></li>`
+            ).join('')}
+        </div>
+      </ul>
+    <div class="col s12">
+      <input type="number" id="lon" name="lon" style="display: none;" step="any">
+      <input type="number" id="lat" name="lat" style="display: none;" step="any">
+      <input id="type" name="type" style="display: none;" step="any" value="event">
+      <input id="event_id" name="event_id" style="display: none;" step="any">
+      <br>
+      <div style="display: flex;justify-content: center;">
+        <button class="waves-effect waves-light btn brown" style="color:#fff" type="Submit">Save</button>
+      </div>
+    </div>
+  </div>
 </form>

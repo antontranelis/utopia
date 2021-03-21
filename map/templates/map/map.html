@@ -154,7 +154,7 @@
       let event= {}
       new_popup
         .setLatLng(e.latlng)
-        .setContent(`{% include "map/includes/popups/new_event1.html" %}`)
+        .setContent(`{% include "map/includes/popups/new_event.html" %}`)
         .openOn(map);
       document.getElementById("lat").value = e.latlng.lat.toFixed(6);
       document.getElementById("lon").value = e.latlng.lng.toFixed(6);
@@ -186,6 +186,7 @@
 
       initDatepicker();
       M.textareaAutoResize(document.getElementById("id_text"));
+      M.updateTextFields();
     }
     // -- new place --
 
@@ -228,6 +229,8 @@
       document.getElementById("place_id").value = place.pk;
 
       M.textareaAutoResize(document.getElementById("id_text"));
+      M.updateTextFields();
+
     }
 
     // -- new user position ---
