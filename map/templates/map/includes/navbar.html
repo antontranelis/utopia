@@ -5,7 +5,7 @@
 </ul>
 <nav>
   <div class="nav-wrapper brown">
-    <a style="margin-left:10px" href="/" class="brand-logo left"><b>#docutopia</b></a>
+    <a style="margin-left:10px" href="/" class="brand-logo left"><b>utopia</b></a>
     <ul id="nav-mobile" class="right hide-on-down">
 
       {% if user.is_authenticated %}
@@ -19,7 +19,7 @@
     </ul>
     {% if user.is_authenticated %}
       {% if user.profile.avatar %}
-        <img height="44" style="margin-top:10px" class="right" src="/media/{{user.profile.avatar}}"></img>&nbsp;&nbsp;&nbsp;
+        <img height="44" style="margin-top:10px; border-radius: 50%;" class="right" src="/media/{{user.profile.avatar}}"></img>&nbsp;&nbsp;&nbsp;
       {% endif %}
     {% endif %}
   </div>

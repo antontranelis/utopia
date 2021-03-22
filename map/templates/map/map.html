@@ -60,17 +60,18 @@
     var current_popup_event;
     var event_layer = L.layerGroup();
     var place_layer = L.layerGroup();
-    var position_layer = L.layerGroup();
+    var profile_layer = L.layerGroup();
     var events = JSON.parse("{{events|escapejs}}");
     var places = JSON.parse("{{places|escapejs}}");
-  //  var profiles = JSON.parse("{{profiles|escapejs}}");
+    var profiles = JSON.parse("{{profiles|escapejs}}");
     var tags = JSON.parse("{{tags|escapejs}}");
-    console.log(tags);
+    var users = JSON.parse("{{users|escapejs}}");
+    var user_id = {{user.id}}
 
     var yellowMarker = L.ExtraMarkers.icon({
       icon: 'fa-calendar-alt',
       markerColor: '#f9a825',
-      shape: 'circle',
+      shape: 'square',
       prefix: 'fa',
       svg: true
     });
@@ -84,7 +85,7 @@
     var redMarker = L.ExtraMarkers.icon({
       icon: 'fa-user',
       markerColor: '#C62828',
-      shape: 'circle',
+      shape: 'square',
       prefix: 'fa',
       svg: true
     });
@@ -98,16 +99,13 @@
           item.marker = marker;
         });
         places.forEach((item, i) => {
-          var marker = L.marker([item.fields.lat, item.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(event_layer);
+          var marker = L.marker([item.fields.lat, item.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(place_layer);
           item.marker = marker;
         });
-        {% for up in user_profiles %}
-          {% if up.lat %}
-            L.marker([{{up.lat}}, {{up.lon}}],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(position_layer);
-          {% endif %}
-        {% endfor %}
-
-        console.log(events);
+        profiles.forEach((profile, i) => {
+          var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
+          profile.marker = marker;
+        });
 
         map.on('popupopen', function(e) {
           // -- init popup popdowns
@@ -115,30 +113,60 @@
           M.Dropdown.init(el,{coverTrigger:false, hover: false, constrainWidth: false});
           // -- cache popup-data
           current_popup_event = e;
-
-          console.log(current_popup_event);
         });
 
 
     // -- add layers to map
-
+        profile_layer.addTo(map);
         event_layer.addTo(map);
         place_layer.addTo(map);
-        position_layer.addTo(map);
 
         var overlayMaps = {
+          "Folks": profile_layer,
           "Events": event_layer,
           "Places": place_layer,
-          "Folks": position_layer,
         };
 
         layercontrol = L.control.layers(null, overlayMaps, {collapsed:false, position: "bottomleft"}).addTo(map);
+
         layercontrol.getContainer().childNodes[1].childNodes[2].childNodes.forEach((item, i) => {
           L.DomUtil.addClass(item.childNodes[0].childNodes[0],'reset-checkbox');
-          L.DomUtil.addClass(item.childNodes[0].childNodes[1],'text-white')
+          L.DomUtil.addClass(item.childNodes[0].childNodes[1],'text-white');
         });
 
+
+
+        //loadMapView([4,7]);
+
+
     }, false);
+
+    function loadMapView(hashes) {
+      profile_layer.clearLayers();
+      event_layer.clearLayers();
+      place_layer.clearLayers();
+      var filterd_events = events.filter(event => {
+        return (event.fields.tags.some((el) => hashes.includes(el))>0)
+      })
+      var filterd_places = places.filter(place => {
+        return (place.fields.tags.some((el) => hashes.includes(el))>0)
+      })
+      var filterd_profiles = profiles.filter(profile => {
+        return (profile.fields.tags.some((el) => hashes.includes(el))>0)
+      })
+      filterd_events.forEach((item, i) => {
+        var marker = L.marker([item.fields.lat, item.fields.lon],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(event_layer);
+        item.marker = marker;
+      });
+      filterd_places.forEach((item, i) => {
+        var marker = L.marker([item.fields.lat, item.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(place_layer);
+        item.marker = marker;
+      });
+      filterd_profiles.forEach((item, i) => {
+        var marker = L.marker([item.fields.lat, item.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
+        item.marker = marker;
+      });
+    }
 
     // -- new event --
 
@@ -188,6 +216,30 @@
       M.textareaAutoResize(document.getElementById("id_text"));
       M.updateTextFields();
     }
+
+    function deleteEvent() {
+      current_popup_event.popup.remove();
+      var event = events.find(evt => {
+        return evt.marker == current_popup_event.popup._source;
+      })
+      var url = "api/";
+      var params = `id=${event.pk}&type=delete_event&csrfmiddlewaretoken={{ csrf_token }}`;
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+
+      //Send the proper header information along with the request
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.addEventListener("load", evt => {
+        event.marker.remove();
+        events = events.filter(item => item !== event)
+        M.toast({html: "Event deleted", classes: 'green rounded', displayLength:4000});
+      });
+      xhr.addEventListener("error", evt => {
+        M.toast({html: "An error occurred while delting this event", classes: 'red rounded', displayLength:4000});
+      });
+      xhr.send(params);
+      }
+
     // -- new place --
 
     function selectPlacePosition() {
@@ -230,13 +282,36 @@
 
       M.textareaAutoResize(document.getElementById("id_text"));
       M.updateTextFields();
-
     }
+
+    function deletePlace() {
+      current_popup_event.popup.remove();
+      var place = places.find(pla => {
+        return pla.marker == current_popup_event.popup._source;
+      })
+      var url = "api/";
+      var params = `id=${place.pk}&type=delete_place&csrfmiddlewaretoken={{ csrf_token }}`;
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+
+      //Send the proper header information along with the request
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.addEventListener("load", evt => {
+        place.marker.remove();
+        places = places.filter(item => item !== place)
+        M.toast({html: "Place deleted", classes: 'green rounded', displayLength:4000});
+      });
+      xhr.addEventListener("error", evt => {
+        M.toast({html: "An error occurred while delting this place", classes: 'red rounded', displayLength:4000});
+      });
+      xhr.send(params);
+    }
+
 
     // -- new user position ---
 
     function selectUserPosition() {
-      M.toast({html: "Select Position!", classes: 'brown rounded', displayLength:4000});
+      M.toast({html: "Select Position!", classes: 'brown rounded', displayLength:2000});
       L.DomUtil.addClass(map._container,'crosshair-cursor-enabled');
       map.on('click', postUserPosition);
     }
@@ -244,30 +319,42 @@
     function postUserPosition(e) {
       L.DomUtil.removeClass(map._container,'crosshair-cursor-enabled');
       map.off('click');
-      var url = "/";
+
+      var profile = profiles.find(item => item.fields.user == user_id);
+      profile.fields.lat = e.latlng.lat.toFixed(6);
+      profile.fields.lon = e.latlng.lng.toFixed(6);
+
+      var url = "api/";
       var params = `lat=${e.latlng.lat.toFixed(6)}&lng=${e.latlng.lng.toFixed(6)}&type=user_position&csrfmiddlewaretoken={{ csrf_token }}`;
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url, true);
 
       //Send the proper header information along with the request
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhr.addEventListener("load", complete);
-      xhr.addEventListener("error", failed);
+      xhr.addEventListener("load", evt => {
+        profile.marker.remove();
+        var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
+        profile.marker = marker;
+        M.toast({html: "You added your position to the map", classes: 'green rounded', displayLength:4000});
+      });
+      xhr.addEventListener("error", evt => {
+        M.toast({html: "An error occurred while sending your position", classes: 'red rounded', displayLength:4000});
+      });
       xhr.send(params);
-      }
-       function complete(evt) {
-           location.reload();
-       }
-       function failed(evt) {
-          M.toast({html: "An error occurred while sending your position", classes: 'red rounded', displayLength:4000});
-       }
-
+    }
 
     function getTagText(id) {
       var tag = tags.filter(item => {
               return item.pk == id;
             })
       return tag[0].fields.tag;
+    }
+
+    function getUsernameById(id) {
+      var user = users.filter(item => {
+              return item.pk == id;
+            })
+      return user[0].fields.username;
     }
 
 

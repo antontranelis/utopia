@@ -1,24 +1,18 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Event, Place, Tag, Profile
+from django.contrib.auth.models import User
 from .forms import NewUserForm, NewEventForm, NewPlaceForm, PreferencesForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core import serializers
-import datetime
+from django.utils.timezone import localtime, now
 # Create your views here.
 
 def map(request):
     if request.method == "POST":
-        if request.POST['type'] == "user_position":
-            profile = Profile.objects.get(user=request.user)
-            profile.lat = float(request.POST['lat'])
-            profile.lon = float(request.POST['lng'])
-            profile.save()
-            messages.success(request, f"You added your position to the map")
-            return redirect("map:map")
         if request.POST['type'] == "event":
             if request.POST['event_id'] != "":
                 form = NewEventForm(instance=Event.objects.get(id=request.POST['event_id']), data=request.POST)
@@ -55,12 +49,30 @@ def map(request):
 
     eventForm = NewEventForm
     placeForm = NewPlaceForm
-    eventsJSON = serializers.serialize('json', Event.objects.filter(date_end__gte = datetime.date.today()))
+    eventsJSON = serializers.serialize('json', Event.objects.filter(date_end__gte = localtime(now()).date()))
     placesJSON = serializers.serialize('json', Place.objects.all())
+    profilesJSON = serializers.serialize('json', Profile.objects.all())
     tagsJSON = serializers.serialize('json', Tag.objects.all())
+    userNameJSON = serializers.serialize('json', User.objects.all(), fields=('username'))
     return render(request=request,
                   template_name="map/map.html",
-                  context={"events": eventsJSON, "places": placesJSON, "user_profiles": Profile.objects.all(), "tags": tagsJSON, "event_form":eventForm, "place_form":placeForm})
+                  context={"events": eventsJSON, "places": placesJSON, "profiles": profilesJSON, "tags": tagsJSON, "users": userNameJSON, "event_form":eventForm, "place_form":placeForm})
+
+def api_request(request):
+    if request.POST['type'] == "user_position":
+        profile = Profile.objects.get(user=request.user)
+        profile.lat = float(request.POST['lat'])
+        profile.lon = float(request.POST['lng'])
+        profile.save()
+        return JsonResponse({"success" : True})
+
+    if request.POST['type'] == "delete_event":
+        event = Event.objects.get(pk=request.POST['id']).delete()
+        return JsonResponse({"success" : True})
+
+    if request.POST['type'] == "delete_place":
+        event = Place.objects.get(pk=request.POST['id']).delete()
+        return JsonResponse({"success" : True})
 
 def profile(request):
     user = request.user

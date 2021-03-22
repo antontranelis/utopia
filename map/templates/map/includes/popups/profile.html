@@ -6,19 +6,17 @@
   <div class="row">
     <div class="col s12">
       <div style="display: flex; align-items: center; margin-top:7px;">
-        {% if up.user.profile.avatar %}
-          <img src="/media/{{up.user.profile.avatar}}"></img>&nbsp;&nbsp;&nbsp;
-        {% endif %}
+        ${profile.fields.avatar !== "" ? `<img style="border-radius: 50%;" width="64" src="/media/${profile.fields.avatar}"></img>&nbsp;&nbsp;&nbsp;` : ``}
         <div>
-          <p style="font-size: 200%; margin:0px;">{{up.user.username|title}}</p>
+          <p style="font-size: 200%; margin:0px;">${getUsernameById(profile.pk)}</p>
         </div>
       </div>
       <br>
-      {% for tag in up.user.profile.tags.all %}
-      <div class="chip">
-        #{{tag.tag}}
-      </div>
-      {% endfor %}
+      ${profile.fields.tags.map((item, j) =>
+        `<div class="chip">
+            ${getTagText(item)}
+         </div>`
+        ).join('')}
       <br>
     </div>
   </div>

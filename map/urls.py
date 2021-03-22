@@ -29,6 +29,7 @@ urlpatterns = [
     path('register/', views.register, name="register"),
     path("login/", views.login_request, name="login"),
     path("logout/", views.logout_request, name="logout"),
+    path("api/", views.api_request, name="api"),
 ]
 # DEBUG:
 if settings.DEBUG:
