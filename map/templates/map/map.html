@@ -33,6 +33,14 @@
     border-radius: 0px 5px 5px 0px !important;
   }
 
+  .leaflet-bar-part-single i {
+    margin-top: 3px;
+  }
+
+  .leaflet-control-locate a {
+    padding-top: 4px;
+  }
+
 </style>
 <body>
     {% leaflet_map "yourmap" %}
@@ -50,7 +58,7 @@
       </ul>
     </div>
 </body>
-<script>
+<script charset="utf-8">
 
     // -- init map --
 
@@ -94,13 +102,13 @@
 
     window.addEventListener("map:init", function (e) {
         map = e.detail.map;
-        events.forEach((item, i) => {
-          var marker = L.marker([item.fields.lat, item.fields.lon],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(event_layer);
-          item.marker = marker;
+        events.forEach((event, i) => {
+          var marker = L.marker([event.fields.lat, event.fields.lon],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(event_layer);
+          event.marker = marker;
         });
-        places.forEach((item, i) => {
-          var marker = L.marker([item.fields.lat, item.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(place_layer);
-          item.marker = marker;
+        places.forEach((place, i) => {
+          var marker = L.marker([place.fields.lat, place.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(place_layer);
+          place.marker = marker;
         });
         profiles.forEach((profile, i) => {
           var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
@@ -109,7 +117,7 @@
 
         map.on('popupopen', function(e) {
           // -- init popup popdowns
-          var el = document.querySelectorAll(".popup-dropdown-trigger");
+          var el = document.querySelectorAll(".dropdown-trigger");
           M.Dropdown.init(el,{coverTrigger:false, hover: false, constrainWidth: false});
           // -- cache popup-data
           current_popup_event = e;
@@ -128,7 +136,7 @@
         };
 
         layercontrol = L.control.layers(null, overlayMaps, {collapsed:false, position: "bottomleft"}).addTo(map);
-        L.control.locate().addTo(map);
+        L.control.locate({"iconElementTag" : "i", "icon" : "fa fa-crosshairs"}).addTo(map);
         layercontrol.getContainer().childNodes[1].childNodes[2].childNodes.forEach((item, i) => {
           L.DomUtil.addClass(item.childNodes[0].childNodes[0],'reset-checkbox');
           L.DomUtil.addClass(item.childNodes[0].childNodes[1],'text-white');
@@ -330,15 +338,15 @@
 
       //Send the proper header information along with the request
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhr.addEventListener("load", evt => {
+      xhr.onload = () => {
         profile.marker.remove();
         var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
         profile.marker = marker;
         M.toast({html: "You added your position to the map", classes: 'green darken-3 rounded', displayLength:4000});
-      });
-      xhr.addEventListener("error", evt => {
+      }
+      xhr.onerror = () => {
         M.toast({html: "An error occurred while sending your position", classes: 'red rounded', displayLength:4000});
-      });
+      }
       xhr.send(params);
     }
 
@@ -356,6 +364,61 @@
       return user[0].fields.username;
     }
 
+    function submitForm(form) {
+      const XHR = new XMLHttpRequest();
+      const FD = new FormData( form );
+      XHR.open( "POST", "api/" );
+      XHR.onload = (r) => {
+        let str = escapeString(r.target.response);
+        console.log(str);
+        let object = JSON.parse(str);
+        object = object.object;
+        console.log(object);
+        if(object.model === "map.place") {
+          place = object;
+          place.fields.text = document.getElementById('id_text').value;
+          place.fields.title = document.getElementById('id_title').value;
+          current_popup_event.popup.remove();
+          if (places.some(item => item.pk == place.pk)) {
+            var old = places.find(pla =>  pla.pk == place.pk);
+            old.marker.remove();
+            places = places.filter(pla => pla.pk != place.pk)
+          }
+          places.push(place);
+          var marker = L.marker([place.fields.lat, place.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(place_layer);
+          place.marker = marker;
+        }
+        if(object.model === "map.event") {
+          event = object;
+          event.fields.text = document.getElementById('id_text').value;
+          event.fields.title = document.getElementById('id_title').value;
+          current_popup_event.popup.remove();
+          if (events.some(item => item.pk == event.pk)) {
+            var old = events.find(pla =>  pla.pk == event.pk);
+            old.marker.remove();
+            events = events.filter(pla => pla.pk != event.pk)
+          }
+          events.push(event);
+          var marker = L.marker([event.fields.lat, event.fields.lon],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(event_layer);
+          event.marker = marker;
+        }
+
+        M.toast({html: "Saved", classes: 'green darken-3 rounded', displayLength:4000});
+      }
+      XHR.onerror = () => {
+        M.toast({html: "An error occurred", classes: 'red rounded', displayLength:4000});
+      }
+      XHR.send(FD);
+
+      return false;
+    }
+
+    function escapeString(str) {
+      return str
+      .replaceAll(String.fromCharCode(92), ``)
+      .replaceAll(String.fromCharCode(34)+"[", ``)
+      .replaceAll("]"+String.fromCharCode(34), ``);
+    }
 
     // ----- init materialize buttons ----- \\
 

@@ -8,7 +8,7 @@
   </ul>
   <div class="row">
     <div class="col s11">
-      <p style="font-size: 180%; margin-bottom:0px; margin-top:8px;">${item.fields.title}</p>
+      <p style="font-size: 180%; margin-bottom:0px; margin-top:8px;">${event.fields.title}</p>
       <br>
     </div>
     <div class="col s1">
@@ -17,19 +17,19 @@
     <div style="display: flex; align-items: center; justify-content: space-between;" class="col s6">
       <div>
         <i style="color: #aaa; vertical-align:middle;" class="material-icons prefix">event</i>
-        <span style="margin:0px; vertical-align:middle;">&nbsp;${new Date(item.fields.date_start).toDateString()}</span>
+        <span style="margin:0px; vertical-align:middle;">&nbsp;${new Date(event.fields.date_start).toDateString()}</span>
       </div>
       <span style="margin-right: -5px;">-</span>
     </div>
     <div style="display: flex; align-items: center;" class="col s6">
       <div>
         <i style="color: #aaa; vertical-align:middle;" class="material-icons prefix">event</i>
-        <span style="margin:0px; vertical-align:middle;">&nbsp;${new Date(item.fields.date_end).toDateString()}</span>
+        <span style="margin:0px; vertical-align:middle;">&nbsp;${new Date(event.fields.date_end).toDateString()}</span>
       </div>
     </div>
     <div class="col s12">
-      <p>${item.fields.text}</p>
-        ${item.fields.tags.map((item, j) =>
+      <p>${event.fields.text}</p>
+        ${event.fields.tags.map((item, j) =>
           `<div class="chip">
               ${getTagText(item)}
            </div>`

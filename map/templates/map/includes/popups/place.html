@@ -8,14 +8,14 @@
   </ul>
   <div class="row">
     <div class="col s11">
-      <p style="font-size: 180%; margin-bottom:0px; margin-top:8px;">${item.fields.title}</p>
+      <p style="font-size: 180%; margin-bottom:0px; margin-top:8px;">${place.fields.title}</p>
     </div>
     <div class="col s1">
       <a class="dropdown-trigger popup-dropdown-trigger" data-target='popup_dropdown'><i style="margin-top: 12px;" class="material-icons">more_vert</i></a>
     </div>
     <div class="col s12">
-      <p>${item.fields.text}</p>
-        ${item.fields.tags.map((item, j) =>
+      <p>${place.fields.text}</p>
+        ${place.fields.tags.map((item, j) =>
           `<div class="chip">
               ${getTagText(item)}
            </div>`

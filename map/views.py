@@ -12,41 +12,6 @@ from django.utils.timezone import localtime, now
 # Create your views here.
 
 def map(request):
-    if request.method == "POST":
-        if request.POST['type'] == "event":
-            if request.POST['event_id'] != "":
-                form = NewEventForm(instance=Event.objects.get(id=request.POST['event_id']), data=request.POST)
-            else:
-                form = NewEventForm(request.POST)
-        if request.POST['type'] == "place":
-            if request.POST['place_id'] != "":
-                form = NewPlaceForm(instance=Place.objects.get(id=request.POST['place_id']), data=request.POST)
-            else:
-                form = NewPlaceForm(request.POST)
-        if form.is_valid():
-            lat = request.POST['lat']
-            lon = request.POST['lon']
-            if request.user.is_authenticated:
-                creator = request.user
-            else:
-                creator = None
-            form.save(lat, lon, creator)
-            if request.POST['type'] == "event":
-                if request.POST['event_id'] != "":
-                    messages.success(request, f"Event updated")
-                else:
-                    messages.success(request, f"New event created")
-            if request.POST['type'] == "place":
-                if request.POST['place_id'] != "":
-                    messages.success(request, f"Place updated")
-                else:
-                    messages.success(request, f"New place created")
-            return redirect("map:map")
-        else:
-            for msg in form.error_messages:
-                messages.error(request, f"{msg}: {form.error_messages[msg]}")
-
-
     eventForm = NewEventForm
     placeForm = NewPlaceForm
     eventsJSON = serializers.serialize('json', Event.objects.filter(date_end__gte = localtime(now()).date()))
@@ -73,6 +38,42 @@ def api_request(request):
     if request.POST['type'] == "delete_place":
         event = Place.objects.get(pk=request.POST['id']).delete()
         return JsonResponse({"success" : True})
+
+    if request.POST['type'] == "place":
+        if request.POST['place_id'] != "":
+            form = NewPlaceForm(instance=Place.objects.get(id=request.POST['place_id']), data=request.POST)
+        else:
+            form = NewPlaceForm(request.POST)
+        if form.is_valid():
+            lat = request.POST['lat']
+            lon = request.POST['lon']
+            if request.user.is_authenticated:
+                creator = request.user
+            else:
+                creator = None
+            place = form.save(lat, lon, creator)
+            return JsonResponse({"object" : serializers.serialize('json', Place.objects.filter(pk=place.pk))})
+        else:
+            for msg in form.error_messages:
+                messages.error(request, f"{msg}: {form.error_messages[msg]}")
+
+    if request.POST['type'] == "event":
+        if request.POST['event_id'] != "":
+            form = NewEventForm(instance=Event.objects.get(id=request.POST['event_id']), data=request.POST)
+        else:
+            form = NewEventForm(request.POST)
+        if form.is_valid():
+            lat = request.POST['lat']
+            lon = request.POST['lon']
+            if request.user.is_authenticated:
+                creator = request.user
+            else:
+                creator = None
+            event = form.save(lat, lon, creator)
+            return JsonResponse({"object" : serializers.serialize('json', Event.objects.filter(pk=event.pk))})
+        else:
+            for msg in form.error_messages:
+                messages.error(request, f"{msg}: {form.error_messages[msg]}")
 
 def profile(request):
     user = request.user

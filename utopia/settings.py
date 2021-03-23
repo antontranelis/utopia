@@ -146,8 +146,8 @@ LEAFLET_CONFIG = {
             'auto-include': True,
         },
         'Control.Locate': {
-            'css': 'map/vendors/leaflet-control-locate/L.Control.Locate.min.css',
-            'js': 'map/vendors/leaflet-control-locate/js/L.Control.Locate.min.js',
+            'css': 'map/vendors/leaflet-control-locate/css/L.Control.Locate.css',
+            'js': 'map/vendors/leaflet-control-locate/js/L.Control.Locate.js',
             'auto-include': True,
         },
     },
