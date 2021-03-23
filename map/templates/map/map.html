@@ -128,7 +128,7 @@
         };
 
         layercontrol = L.control.layers(null, overlayMaps, {collapsed:false, position: "bottomleft"}).addTo(map);
-
+        L.control.locate().addTo(map);
         layercontrol.getContainer().childNodes[1].childNodes[2].childNodes.forEach((item, i) => {
           L.DomUtil.addClass(item.childNodes[0].childNodes[0],'reset-checkbox');
           L.DomUtil.addClass(item.childNodes[0].childNodes[1],'text-white');
@@ -232,7 +232,7 @@
       xhr.addEventListener("load", evt => {
         event.marker.remove();
         events = events.filter(item => item !== event)
-        M.toast({html: "Event deleted", classes: 'green rounded', displayLength:4000});
+        M.toast({html: "Event deleted", classes: 'green darken-3 rounded', displayLength:4000});
       });
       xhr.addEventListener("error", evt => {
         M.toast({html: "An error occurred while delting this event", classes: 'red rounded', displayLength:4000});
@@ -299,14 +299,13 @@
       xhr.addEventListener("load", evt => {
         place.marker.remove();
         places = places.filter(item => item !== place)
-        M.toast({html: "Place deleted", classes: 'green rounded', displayLength:4000});
+        M.toast({html: "Place deleted", classes: 'green darken-3 rounded', displayLength:4000});
       });
       xhr.addEventListener("error", evt => {
         M.toast({html: "An error occurred while delting this place", classes: 'red rounded', displayLength:4000});
       });
       xhr.send(params);
     }
-
 
     // -- new user position ---
 
@@ -335,7 +334,7 @@
         profile.marker.remove();
         var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
         profile.marker = marker;
-        M.toast({html: "You added your position to the map", classes: 'green rounded', displayLength:4000});
+        M.toast({html: "You added your position to the map", classes: 'green darken-3 rounded', displayLength:4000});
       });
       xhr.addEventListener("error", evt => {
         M.toast({html: "An error occurred while sending your position", classes: 'red rounded', displayLength:4000});

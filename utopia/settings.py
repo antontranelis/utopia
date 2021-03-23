@@ -145,6 +145,11 @@ LEAFLET_CONFIG = {
             'js': 'map/vendors/leaflet.extra-markers/js/leaflet.extra-markers.min.js',
             'auto-include': True,
         },
+        'Control.Locate': {
+            'css': 'map/vendors/leaflet.control.locate/L.Control.Locate.min.css',
+            'js': 'map/vendors/leaflet.control.locate/js/L.Control.Locate.min.js',
+            'auto-include': True,
+        },
     },
 
 }
