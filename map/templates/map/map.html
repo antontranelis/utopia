@@ -74,7 +74,7 @@
     var profiles = JSON.parse("{{profiles|escapejs}}");
     var tags = JSON.parse("{{tags|escapejs}}");
     var users = JSON.parse("{{users|escapejs}}");
-    var user_id = {{user.id}}
+    if ("{{user.id}}" !== "None") var user_id = {{user.id}};
 
     var yellowMarker = L.ExtraMarkers.icon({
       icon: 'fa-calendar-alt',
@@ -130,7 +130,7 @@
         place_layer.addTo(map);
 
         var overlayMaps = {
-          "Folks": profile_layer,
+          "People": profile_layer,
           "Events": event_layer,
           "Places": place_layer,
         };
