@@ -17,20 +17,20 @@
     <div style="display: flex; align-items: center; justify-content: space-between;" class="col s6">
       <div>
         <i style="color: #aaa; vertical-align:middle;" class="material-icons prefix">event</i>
-        <span style="margin:0px; vertical-align:middle;">&nbsp;${new Date(event.fields.date_start).toDateString()}</span>
+        <span style="margin:0px; vertical-align:middle;">&nbsp;${new Date(event.fields.date_start).toISOString().substring(0, 10)}</span>
       </div>
       <span style="margin-right: -5px;">-</span>
     </div>
     <div style="display: flex; align-items: center;" class="col s6">
       <div>
         <i style="color: #aaa; vertical-align:middle;" class="material-icons prefix">event</i>
-        <span style="margin:0px; vertical-align:middle;">&nbsp;${new Date(event.fields.date_end).toDateString()}</span>
+        <span style="margin:0px; vertical-align:middle;">&nbsp;${new Date(event.fields.date_end).toISOString().substring(0, 10)}</span>
       </div>
     </div>
     <div class="col s12">
       <p>${event.fields.text}</p>
         ${event.fields.tags.map((item, j) =>
-          `<div class="chip">
+          `<div class="chip" style="background-color: ${getTagColor(item)}; color: #fff">
               ${getTagText(item)}
            </div>`
           ).join('')}

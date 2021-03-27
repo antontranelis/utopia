@@ -52,13 +52,6 @@
       prefix: 'fa',
       svg: true
     });
-    var greenMarker = L.ExtraMarkers.icon({
-      icon: 'fa-circle',
-      markerColor: '#2E7D32',
-      shape: 'circle',
-      prefix: 'fa',
-      svg: true
-    });
     var redMarker = L.ExtraMarkers.icon({
       icon: 'fa-user',
       markerColor: '#C62828',
@@ -72,7 +65,13 @@
     window.addEventListener("map:init", function (e) {
         map = e.detail.map;
         events.forEach((event, i) => {
-          var marker = L.marker([event.fields.lat, event.fields.lon],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(event_layer);
+          var marker = L.marker([event.fields.lat, event.fields.lon],{icon: L.ExtraMarkers.icon({
+            icon: 'fa-calendar-alt',
+            markerColor: `${event.fields.tags.length>0 ? `${getTagColor(event.fields.tags[0])}` : `#666`}`,
+            shape: 'square',
+            prefix: 'fa',
+            svg: true
+          })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(event_layer);
           event.marker = marker;
         });
         places.forEach((place, i) => {
@@ -118,7 +117,6 @@
         };
 
         layercontrol = L.control.layers(null, overlayMaps, {collapsed:false, position: "bottomleft"}).addTo(map);
-        L.control.locate({"iconElementTag" : "i", "icon" : "fa fa-crosshairs"}).addTo(map);
         layercontrol.getContainer().childNodes[1].childNodes[2].childNodes.forEach((item, i) => {
           L.DomUtil.addClass(item.childNodes[0].childNodes[0],'reset-checkbox');
           L.DomUtil.addClass(item.childNodes[0].childNodes[1],'text-white');
@@ -130,6 +128,11 @@
           position: 'topright'
         });
         searchControl.addTo(map);
+
+        L.control.locate({"iconElementTag" : "i", "icon" : "fa fa-crosshairs", position: "topright"}).addTo(map);
+
+
+
         //loadMapView([4,7]);
 
 
@@ -400,7 +403,13 @@
             events = events.filter(pla => pla.pk != event.pk)
           }
           events.push(event);
-          var marker = L.marker([event.fields.lat, event.fields.lon],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(event_layer);
+          var marker = L.marker([event.fields.lat, event.fields.lon],{icon: L.ExtraMarkers.icon({
+            icon: 'fa-calendar-alt',
+            markerColor: `${event.fields.tags.length>0 ? `${getTagColor(event.fields.tags[0])}` : `#666`}`,
+            shape: 'square',
+            prefix: 'fa',
+            svg: true
+          })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(event_layer);
           event.marker = marker;
         }
 

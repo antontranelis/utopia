@@ -19,7 +19,7 @@
     </ul>
     {% if user.is_authenticated %}
       {% if user.profile.avatar %}
-        <img height="44" style="margin-top:10px; border-radius: 50%;" class="right" src="/media/{{user.profile.avatar}}"></img>&nbsp;&nbsp;&nbsp;
+        <img id="nav-avatar" height="44" style="margin-top:10px; border-radius: 50%;" class="right" src="/media/{{user.profile.avatar}}"></img>&nbsp;&nbsp;&nbsp;
       {% endif %}
     {% endif %}
   </div>

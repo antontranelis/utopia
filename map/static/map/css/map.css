@@ -1,0 +1,96 @@
+#yourmap {
+  width: 100%;
+  height: calc(100vh - 65px);
+}
+
+.leaflet-container.crosshair-cursor-enabled {
+  cursor:crosshair;
+}
+
+.extra-marker.extra-marker-svg i {
+  width: 36px !important;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.leaflet-control-layers-expanded, .leaflet-control-layers{
+  background-color: #795548;
+  margin-left: 0 !important;
+  border-radius: 0px 5px 5px 0px !important;
+  box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
+  border: none !important;
+}
+
+.btn-floating {
+  box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
+  border: none !important;
+}
+
+.fixed-action-btn {
+  margin-bottom: 10px;
+}
+
+.toast {
+  margin-left: 50px;
+  margin-top: 70px;
+  margin-bottom: 40px;
+  Width: 250px !important;
+  maxWidth: 50% !important;
+}
+
+.leaflet-bar-part-single {
+  border-radius: 5px !important;
+  padding: 11px !important;
+  height: 39px !important;
+  width: 38px !important;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 5px !important;
+}
+
+.leaflet-control-locate {
+  border-width: 0px !important;
+  margin-top: 0px !important;
+  display: inline-block !important;
+  float: none !important;
+}
+
+.leaflet-photon {
+  margin-right: 10px !important;
+  display: inline-block !important;
+  float: none !important;
+}
+
+.photon-input {
+  background-color: rgb(255, 255, 255) !important;
+  border-radius: 5px !important;
+  padding-left: 36px !important;
+  background-image: url('/static/map/img/search.png');
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
+  border: 1px solid #fff !important;
+  height: 37px !important;
+  width: 0px !important;
+  transition: width .5s;
+}
+
+
+.photon-input:focus {
+  color: #555;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  border-radius: 5px !important;
+  box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
+  border: 1px solid #888 !important;
+  width: 170px !important;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #333;
+}
+
+.input-field input {
+  width: calc(100% - 2.5rem);
+  margin-left: 2.5rem;
+}
