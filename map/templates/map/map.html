@@ -27,10 +27,16 @@
 
   .leaflet-control-layers-expanded, .leaflet-control-layers{
     background-color: #795548;
-    border: 2px solid #795548 !important;
     margin-bottom: calc(50vh - 82px) !important;
     margin-left: 0 !important;
     border-radius: 0px 5px 5px 0px !important;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
+    border: none !important;
+  }
+
+  .btn-floating {
+    box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
+    border: none !important;
   }
 
   .leaflet-bar-part-single i {
@@ -43,18 +49,20 @@
 
   .leaflet-photon {
     margin-right: 20px !important;
-    margin-right: calc(50vw - 141px) !important;
+    margin-right: calc(50vw - 115px) !important;
+    width: 230px;
   }
 
   .photon-input {
     background-color: rgb(255, 255, 255) !important;
     border-radius: 5px !important;
     padding-left: 40px !important;
-    border: 2px solid rgba(0,0,0,0.2) !important;
     margin-right: 10px !important;
     background-image: url('/static/map/img/search.webp');
     background-position: 10px center;
     background-repeat: no-repeat;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
+    border: none !important;
   }
 
 
@@ -62,8 +70,9 @@
     color: #555;
     border-bottom: none !important;
     box-shadow: none !important;
-    border: 2px solid #aaa !important;
     border-radius: 5px !important;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
+    border: none !important;
   }
 
 </style>
@@ -170,10 +179,11 @@
         var searchControl = L.control.photon({
           feedbackEmail: null,
           placeholder: '...',
-          position: 'topright'
+          position: 'topleft'
         });
         searchControl.addTo(map);
         //loadMapView([4,7]);
+        setMapHeight();
 
 
     }, false);
@@ -456,9 +466,19 @@
       var instances = M.FloatingActionButton.init(elems);
     });
 
+    window.addEventListener('resize', function () {setMapHeight();})
+
+
     function initDatepicker() {
       var elems = document.querySelectorAll(".datepicker");
       var instances = M.Datepicker.init(elems, {container: "body", autoClose: true, format: 'yyyy-mm-dd'});
+    }
+
+    function setMapHeight() {
+      var window_height = window.innerHeight;
+      var header_height = document.getElementById("navbar").clientHeight;
+      document.getElementById("yourmap").style.height=window_height-header_height+"px";
+
     }
 
 </script>

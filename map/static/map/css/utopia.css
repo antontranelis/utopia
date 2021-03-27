@@ -58,3 +58,9 @@ body {
 #popup_dropdown li a {
   color: #888 !important;
 }
+
+#navbar {
+  box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
+  border: none !important;
+  z-index: 1000 !important;
+}
