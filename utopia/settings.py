@@ -133,7 +133,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (50.989557, 9.223022),
-    'DEFAULT_ZOOM': 8,
+    'DEFAULT_ZOOM': 9,
     'MIN_ZOOM': 3,
     'MAX_ZOOM': 18,
     'RESET_VIEW': False,

@@ -64,7 +64,3 @@ body {
   border: none !important;
   z-index: 1000 !important;
 }
-
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #555;
-}

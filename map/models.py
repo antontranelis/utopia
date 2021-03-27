@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Tag(models.Model):
     tag = models.CharField(max_length=200)
+    color = models.CharField(max_length=100, default = "#000")
+    prio = models.SmallIntegerField()
 
     def __str__(self):
         return self.tag

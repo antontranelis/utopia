@@ -1,88 +1,15 @@
 {% extends "map/header.html" %}
 {% block content%}
+{% load static %}
+
 
 {% load leaflet_tags %}
 
 <head>
     {% leaflet_js %}
     {% leaflet_css %}
+    <link href="{% static 'map/css/map.css' %}" rel="stylesheet">
 </head>
-<style>
-  #yourmap {
-    width: 100%;
-    height: calc(100vh - 65px);
-  }
-
-  .leaflet-container.crosshair-cursor-enabled {
-    cursor:crosshair;
-  }
-
-  .extra-marker.extra-marker-svg i {
-    width: 36px !important;
-  }
-
-  .text-white {
-    color: #fff;
-  }
-
-  .leaflet-control-layers-expanded, .leaflet-control-layers{
-    background-color: #795548;
-    margin-left: 0 !important;
-    border-radius: 0px 5px 5px 0px !important;
-    box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
-    border: none !important;
-  }
-
-  .btn-floating {
-    box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
-    border: none !important;
-  }
-
-  .fixed-action-btn {
-    margin-bottom: 10px;
-  }
-
-  .toast {
-    margin-top: 50px;
-  }
-
-  .leaflet-bar-part-single i {
-    margin-top: 3px;
-  }
-
-  .leaflet-control-locate a {
-    padding-top: 4px;
-  }
-
-  .leaflet-photon {
-    margin-right: 50px !important;
-    width: 200px;
-  }
-
-  .photon-input {
-    background-color: rgb(255, 255, 255) !important;
-    border-radius: 5px !important;
-    padding-left: 40px !important;
-    background-image: url('/static/map/img/search.webp');
-    background-position: 10px center;
-    background-repeat: no-repeat;
-    box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
-    border: 1px solid #fff !important;
-    height: 2.5rem !important;
-  }
-
-
-  .photon-input:focus {
-    color: #555;
-    border-bottom: none !important;
-    box-shadow: none !important;
-    border-radius: 5px !important;
-    box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
-    border: 1px solid #888 !important;
-
-  }
-
-</style>
 <body>
     {% leaflet_map "yourmap" %}
     <div class="fixed-action-btn">
@@ -95,7 +22,7 @@
         {% endif %}
         <li><a class="btn-floating yellow darken-3" title="New Event" onclick="selectEventPosition()"><i style="font-size: 18px;" class="fa fa-calendar-alt"></i></a></li>
         <li><a class="btn-floating green darken-3" title="New Place" onclick="selectPlacePosition()"><i class="material-icons">location_on</i></a></li>
-        <!-- <li><a class="btn-floating blue darken-3" title="New Small Ad"><i class="material-icons">local_offer</i></a></li> -->
+        <li><a class="btn-floating blue darken-3" title="New Offer / Request"><i class="material-icons">local_offer</i></a></li>
       </ul>
     </div>
 </body>
@@ -149,7 +76,14 @@
           event.marker = marker;
         });
         places.forEach((place, i) => {
-          var marker = L.marker([place.fields.lat, place.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(place_layer);
+          var marker = L.marker([place.fields.lat, place.fields.lon],{icon: L.ExtraMarkers.icon({
+            icon: 'fa-circle',
+            markerColor: `${place.fields.tags.length>0 ? `${getTagColor(place.fields.tags[0])}` : `#666`}`,
+            //iconColor: `${place.fields.tags.length>1 ? `${getTagColor(place.fields.tags[1])}` : `#fff`}`,
+            shape: 'circle',
+            prefix: 'fa',
+            svg: true
+          })}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(place_layer);
           place.marker = marker;
         });
         profiles.forEach((profile, i) => {
@@ -167,7 +101,7 @@
 
 
     // -- add layers to map
-        all_layers = L.markerClusterGroup.layerSupport();
+        all_layers = L.markerClusterGroup.layerSupport({maxClusterRadius: 40});
         all_layers.addLayer(profile_layer);
         all_layers.addLayer(event_layer);
         all_layers.addLayer(place_layer);
@@ -180,6 +114,7 @@
           "People": profile_layer,
           "Events": event_layer,
           "Places": place_layer,
+          "Market": place_layer
         };
 
         layercontrol = L.control.layers(null, overlayMaps, {collapsed:false, position: "bottomleft"}).addTo(map);
@@ -196,9 +131,7 @@
         });
         searchControl.addTo(map);
         //loadMapView([4,7]);
-        setMapHeight();
-        var el = document.querySelectorAll(".dropdown-trigger");
-        M.Dropdown.init(el,{coverTrigger:false, hover: false, constrainWidth: false});
+
 
 
     }, false);
@@ -412,6 +345,13 @@
       return tag[0].fields.tag;
     }
 
+    function getTagColor(id) {
+      var tag = tags.filter(item => {
+              return item.pk == id;
+            })
+      return tag[0].fields.color;
+    }
+
     function getUsernameById(id) {
       var user = users.filter(item => {
               return item.pk == id;
@@ -440,7 +380,13 @@
             places = places.filter(pla => pla.pk != place.pk)
           }
           places.push(place);
-          var marker = L.marker([place.fields.lat, place.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(place_layer);
+          var marker = L.marker([place.fields.lat, place.fields.lon],{icon: L.ExtraMarkers.icon({
+            icon: 'fa-circle',
+            markerColor: `${place.fields.tags.length>0 ? `${getTagColor(place.fields.tags[0])}` : `#666`}`,
+            shape: 'circle',
+            prefix: 'fa',
+            svg: true
+          })}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(place_layer);
           place.marker = marker;
         }
         if(object.model === "map.event") {
@@ -480,6 +426,10 @@
     document.addEventListener('DOMContentLoaded', function() {
       var elems = document.querySelectorAll('.fixed-action-btn');
       var instances = M.FloatingActionButton.init(elems);
+      var el = document.querySelectorAll(".dropdown-trigger");
+      M.Dropdown.init(el,{coverTrigger:false, hover: false, constrainWidth: false});
+      setMapHeight();
+
     });
 
     window.addEventListener('resize', function () {setMapHeight();})
