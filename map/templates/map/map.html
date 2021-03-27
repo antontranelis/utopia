@@ -41,6 +41,31 @@
     padding-top: 4px;
   }
 
+  .leaflet-photon {
+    margin-right: 20px !important;
+    margin-right: calc(50vw - 141px) !important;
+  }
+
+  .photon-input {
+    background-color: rgb(255, 255, 255) !important;
+    border-radius: 5px !important;
+    padding-left: 40px !important;
+    border: 2px solid rgba(0,0,0,0.2) !important;
+    margin-right: 10px !important;
+    background-image: url('/static/map/img/search.webp');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+  }
+
+
+  .photon-input:focus {
+    color: #555;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    border: 2px solid #aaa !important;
+    border-radius: 5px !important;
+  }
+
 </style>
 <body>
     {% leaflet_map "yourmap" %}
@@ -142,8 +167,12 @@
           L.DomUtil.addClass(item.childNodes[0].childNodes[1],'text-white');
         });
 
-
-
+        var searchControl = L.control.photon({
+          feedbackEmail: null,
+          placeholder: '...',
+          position: 'topright'
+        });
+        searchControl.addTo(map);
         //loadMapView([4,7]);
 
 

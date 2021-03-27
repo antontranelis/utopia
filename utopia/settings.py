@@ -150,6 +150,11 @@ LEAFLET_CONFIG = {
             'js': 'map/vendors/leaflet-control-locate/js/L.Control.Locate.js',
             'auto-include': True,
         },
+        'Photon': {
+            'css': 'map/vendors/leaflet-photon/css/leaflet.photon.css',
+            'js': 'map/vendors/leaflet-photon/js/leaflet.photon.js',
+            'auto-include': True,
+        },
     },
 
 }
