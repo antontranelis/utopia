@@ -155,6 +155,16 @@ LEAFLET_CONFIG = {
             'js': 'map/vendors/leaflet-photon/js/leaflet.photon.js',
             'auto-include': True,
         },
+        'MarkerCluster': {
+            'css': 'map/vendors/leaflet-markercluster/css/MarkerCluster.css',
+            'css': 'map/vendors/leaflet-markercluster/css/MarkerCluster.Default.css',
+            'js': 'map/vendors/leaflet-markercluster/js/leaflet.markercluster-src.js',
+            'auto-include': True,
+        },
+        'MarkerCluster-Subgroup': {
+            'js': 'map/vendors/leaflet-markercluster/js/leaflet.markercluster.layersupport.js',
+            'auto-include': True,
+        },
     },
 
 }

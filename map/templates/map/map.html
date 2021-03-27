@@ -27,7 +27,6 @@
 
   .leaflet-control-layers-expanded, .leaflet-control-layers{
     background-color: #795548;
-    margin-bottom: calc(50vh - 82px) !important;
     margin-left: 0 !important;
     border-radius: 0px 5px 5px 0px !important;
     box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
@@ -39,6 +38,14 @@
     border: none !important;
   }
 
+  .fixed-action-btn {
+    margin-bottom: 10px;
+  }
+
+  .toast {
+    margin-top: 50px;
+  }
+
   .leaflet-bar-part-single i {
     margin-top: 3px;
   }
@@ -48,21 +55,20 @@
   }
 
   .leaflet-photon {
-    margin-right: 20px !important;
-    margin-right: calc(50vw - 115px) !important;
-    width: 230px;
+    margin-right: 50px !important;
+    width: 200px;
   }
 
   .photon-input {
     background-color: rgb(255, 255, 255) !important;
     border-radius: 5px !important;
     padding-left: 40px !important;
-    margin-right: 10px !important;
     background-image: url('/static/map/img/search.webp');
     background-position: 10px center;
     background-repeat: no-repeat;
     box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
-    border: none !important;
+    border: 1px solid #fff !important;
+    height: 2.5rem !important;
   }
 
 
@@ -72,7 +78,8 @@
     box-shadow: none !important;
     border-radius: 5px !important;
     box-shadow: 0 1px 5px rgb(0 0 0 / 40%) !important;
-    border: none !important;
+    border: 1px solid #888 !important;
+
   }
 
 </style>
@@ -97,9 +104,10 @@
     // -- init map --
 
     var map = null;
-    var new_popup = L.popup({minWidth: 300, closeOnClick: false, keepInView: false});
-    var edit_popup = L.popup({offset: [1,-25], minWidth: 300, keepInView: true});
+    var new_popup = L.popup({minWidth: 275,  maxWidth:275, closeOnClick: false, keepInView: false, autoPanPaddingTopLeft: [0,60]});
+    var edit_popup = L.popup({offset: [1,-25], minWidth: 275, maxWidth:275, keepInView: false, autoPanPaddingTopLeft: [0,60]});
     var current_popup_event;
+    var all_layers;
     var event_layer = L.layerGroup();
     var place_layer = L.layerGroup();
     var profile_layer = L.layerGroup();
@@ -137,15 +145,15 @@
     window.addEventListener("map:init", function (e) {
         map = e.detail.map;
         events.forEach((event, i) => {
-          var marker = L.marker([event.fields.lat, event.fields.lon],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(event_layer);
+          var marker = L.marker([event.fields.lat, event.fields.lon],{icon: yellowMarker}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(event_layer);
           event.marker = marker;
         });
         places.forEach((place, i) => {
-          var marker = L.marker([place.fields.lat, place.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(place_layer);
+          var marker = L.marker([place.fields.lat, place.fields.lon],{icon: greenMarker}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(place_layer);
           place.marker = marker;
         });
         profiles.forEach((profile, i) => {
-          var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
+          var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(profile_layer);
           profile.marker = marker;
         });
 
@@ -159,9 +167,14 @@
 
 
     // -- add layers to map
+        all_layers = L.markerClusterGroup.layerSupport();
+        all_layers.addLayer(profile_layer);
+        all_layers.addLayer(event_layer);
+        all_layers.addLayer(place_layer);
         profile_layer.addTo(map);
         event_layer.addTo(map);
         place_layer.addTo(map);
+        map.addLayer(all_layers);
 
         var overlayMaps = {
           "People": profile_layer,
@@ -178,12 +191,14 @@
 
         var searchControl = L.control.photon({
           feedbackEmail: null,
-          placeholder: '...',
-          position: 'topleft'
+          placeholder: 'search ...',
+          position: 'topright'
         });
         searchControl.addTo(map);
         //loadMapView([4,7]);
         setMapHeight();
+        var el = document.querySelectorAll(".dropdown-trigger");
+        M.Dropdown.init(el,{coverTrigger:false, hover: false, constrainWidth: false});
 
 
     }, false);
@@ -379,6 +394,7 @@
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhr.onload = () => {
         profile.marker.remove();
+        all_layers.checkOut(profile.marker);
         var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
         profile.marker = marker;
         M.toast({html: "You added your position to the map", classes: 'green darken-3 rounded', displayLength:4000});
