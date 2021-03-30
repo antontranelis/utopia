@@ -16,7 +16,7 @@
     <div class="col s12">
       <p>${place.fields.text}</p>
         ${place.fields.tags.map((item, j) =>
-          `<div class="chip" style="background-color: ${getTagColor(item)}; color: #fff">
+          `<div class="chip" style="cursor: pointer; background-color: ${getTagColor(item)}; color: #fff">
               ${getTagText(item)}
            </div>`
           ).join('')}

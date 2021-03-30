@@ -68,6 +68,7 @@
           var marker = L.marker([event.fields.lat, event.fields.lon],{icon: L.ExtraMarkers.icon({
             icon: 'fa-calendar-alt',
             markerColor: `${event.fields.tags.length>0 ? `${getTagColor(event.fields.tags[0])}` : `#666`}`,
+            svgBorderColor: `${event.fields.tags.length>1 ? `${getTagColor(event.fields.tags[1])}` : `RGBA(35, 31, 32, 0.2)`}`,
             shape: 'square',
             prefix: 'fa',
             svg: true
@@ -78,7 +79,7 @@
           var marker = L.marker([place.fields.lat, place.fields.lon],{icon: L.ExtraMarkers.icon({
             icon: 'fa-circle',
             markerColor: `${place.fields.tags.length>0 ? `${getTagColor(place.fields.tags[0])}` : `#666`}`,
-            //iconColor: `${place.fields.tags.length>1 ? `${getTagColor(place.fields.tags[1])}` : `#fff`}`,
+            svgBorderColor: `${place.fields.tags.length>1 ? `${getTagColor(place.fields.tags[1])}` : `RGBA(35, 31, 32, 0.2)`}`,
             shape: 'circle',
             prefix: 'fa',
             svg: true
@@ -100,7 +101,32 @@
 
 
     // -- add layers to map
-        all_layers = L.markerClusterGroup.layerSupport({maxClusterRadius: 40});
+        all_layers = L.markerClusterGroup.layerSupport({maxClusterRadius: 40, iconCreateFunction: function (cluster) {
+          		var childCount = cluster.getChildCount();
+              var childMarkers = cluster.getAllChildMarkers();
+
+
+              var colors = [];
+              childMarkers.forEach((child, i) => {
+                colors.push(child.options.icon.options.markerColor);
+              });
+
+              console.log(colors);
+
+              var counts = [];
+              colors.forEach((x) => {
+                if(counts.find((y) => y.color === x) == undefined) counts.push({color: x , count: 1});
+                else {
+                  var el = counts.find((y) => y.color === x);
+                  el.count = el.count+1;
+                  console.log("check");
+                }
+              });
+              console.log(counts);
+              console.log(counts.sort(function(a, b){return -(a.count - b.count)}));
+
+          		return new L.DivIcon({ html: `<div style="background-color:${counts[1].color};opacity: 0.9;"><div style="background-color:${counts[0].color}; opacity: 1;"><span><b>${childCount}</b></span></div></div>`, className: 'marker-cluster', iconSize: new L.Point(40, 40) });
+          	}});
         all_layers.addLayer(profile_layer);
         all_layers.addLayer(event_layer);
         all_layers.addLayer(place_layer);
@@ -386,10 +412,11 @@
           var marker = L.marker([place.fields.lat, place.fields.lon],{icon: L.ExtraMarkers.icon({
             icon: 'fa-circle',
             markerColor: `${place.fields.tags.length>0 ? `${getTagColor(place.fields.tags[0])}` : `#666`}`,
+            svgBorderColor: `${place.fields.tags.length>1 ? `${getTagColor(place.fields.tags[1])}` : `RGBA(35, 31, 32, 0.2)`}`,
             shape: 'circle',
             prefix: 'fa',
             svg: true
-          })}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 300}).addTo(place_layer);
+          })}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(place_layer);
           place.marker = marker;
         }
         if(object.model === "map.event") {
@@ -406,10 +433,11 @@
           var marker = L.marker([event.fields.lat, event.fields.lon],{icon: L.ExtraMarkers.icon({
             icon: 'fa-calendar-alt',
             markerColor: `${event.fields.tags.length>0 ? `${getTagColor(event.fields.tags[0])}` : `#666`}`,
+            svgBorderColor: `${event.fields.tags.length>1 ? `${getTagColor(event.fields.tags[1])}` : `RGBA(35, 31, 32, 0.2)`}`,
             shape: 'square',
             prefix: 'fa',
             svg: true
-          })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 300}).addTo(event_layer);
+          })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(event_layer);
           event.marker = marker;
         }
 
@@ -455,6 +483,7 @@
       document.getElementById("yourmap").style.height=window_height-header_height+"px";
 
     }
+
 
 </script>
 {% endblock %}

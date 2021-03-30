@@ -41,20 +41,22 @@
 	background-color: rgb(241, 128, 23);
 }
 
-.marker-cluster {
-	background-clip: padding-box;
-	border-radius: 20px;
-	}
 .marker-cluster div {
+	border-radius: 18px;
+	width: 36px;
+	height: 36px;
+	padding: 3px;
+
+
+	}
+.marker-cluster div div {
 	width: 30px;
 	height: 30px;
-	margin-left: 5px;
-	margin-top: 5px;
-
 	text-align: center;
 	border-radius: 15px;
 	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
 	}
 .marker-cluster span {
-	line-height: 30px;
+	line-height: 25px;
+	color: #fff;
 	}

@@ -142,7 +142,7 @@ LEAFLET_CONFIG = {
     'PLUGINS': {
         'ExtraMarkers': {
             'css': 'map/vendors/leaflet-extra-markers/css/leaflet.extra-markers.min.css',
-            'js': 'map/vendors/leaflet-extra-markers/js/leaflet.extra-markers.min.js',
+            'js': 'map/vendors/leaflet-extra-markers/js/leaflet.extra-markers.js',
             'auto-include': True,
         },
         'Control.Locate': {
