@@ -103,6 +103,12 @@
 
           map.on('click', function(e) {
             floatingActionButton[0].close();
+            M.Toast.dismissAll();
+          });
+
+          map.on('preclick', function(e) {
+            floatingActionButton[0].close();
+            M.Toast.dismissAll();
           });
 
 
