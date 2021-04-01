@@ -32,13 +32,7 @@
   margin-bottom: 10px;
 }
 
-.toast {
-  margin-left: 50px;
-  margin-top: 70px;
-  margin-bottom: 40px;
-  Width: 250px !important;
-  maxWidth: 50% !important;
-}
+
 
 .leaflet-bar-part-single {
   border-radius: 5px !important;
