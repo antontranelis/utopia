@@ -137,8 +137,9 @@ LEAFLET_CONFIG = {
     'MIN_ZOOM': 3,
     'MAX_ZOOM': 18,
     'RESET_VIEW': False,
+    'TILES': 'https://tile.osmand.net/hd/{z}/{x}/{y}.png',
     'DEFAULT_PRECISION': 6,
-    'ATTRIBUTION_PREFIX': 'Powered by django-leaflet',
+    'ATTRIBUTION_PREFIX': '',
     'PLUGINS': {
         'ExtraMarkers': {
             'css': 'map/vendors/leaflet-extra-markers/css/leaflet.extra-markers.min.css',
