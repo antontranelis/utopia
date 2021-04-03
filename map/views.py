@@ -141,6 +141,7 @@ def preferences(request):
     initial_data = {
         "tags": user.profile.tags.all(),
         "avatar": user.profile.avatar,
+        "text": user.profile.text,
     }
     form = PreferencesForm(initial=initial_data)
     return render(request=request,

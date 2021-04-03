@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="col s12">
-      <p>${event.fields.text}</p>
+      <p style="white-space: pre-line">${replaceURLs(event.fields.text)}</p>
         ${event.fields.tags.map((item, j) =>
           `<div class="chip" style="background-color: ${getTagColor(item)}; color: #fff">
               ${getTagText(item)}

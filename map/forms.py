@@ -68,7 +68,8 @@ class NewPlaceForm(forms.ModelForm):
 class PreferencesForm(forms.ModelForm):
    class Meta:
        model = Profile
-       fields = ['tags', 'avatar']
+       fields = ['text', 'avatar']
        widgets = {
+             'text': forms.Textarea(attrs={'class': 'materialize-textarea'}),
              'tags': forms.CheckboxSelectMultiple(attrs={'queryset': Tag.objects.all(), 'class': 'reset-checkbox'}),
         }

@@ -12,11 +12,7 @@
         </div>
       </div>
       <br>
-      ${profile.fields.tags.map((item, j) =>
-        `<div class="chip">
-            ${getTagText(item)}
-         </div>`
-        ).join('')}
+        <p style="white-space: pre-line">${replaceURLs(profile.fields.text)}</p>
       <br>
     </div>
   </div>

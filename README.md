@@ -9,6 +9,7 @@ The scope is limited to mapping and sharing of real life data. Meetings and comm
 git clone https://github.com/antontranelis/utopia.git
 cd utopia/
 pip install -r requirements.txt
+python manage.py migrate
 ```
 ## Run
 ```

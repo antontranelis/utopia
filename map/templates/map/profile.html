@@ -2,34 +2,34 @@
 {% load static %}
 
 {% block content%}
-<div class="container">
-  <div class="row">
-    <div class="col s12 m6 l6">
-      <div style="display: flex; align-items: center; margin-top:7px;">
-        <img src="{% static 'map/img/64_15.png'%}"></img>&nbsp;&nbsp;&nbsp;<p style="font-size: 240%;">{{user.username|title}}</p>
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m6 l6">
+        <div style="display: flex; align-items: center; margin-top:7px;">
+          <img src="{% static 'map/img/64_15.png'%}"></img>&nbsp;&nbsp;&nbsp;<p style="font-size: 240%;">{{user.username|title}}</p>
+        </div>
       </div>
-    </div>
-    <div class="col s12 m6">
-      <br><br>
+      <div class="col s12 m6">
+        <br><br>
 
-      <img height="50" src="{% static 'map/img/badges1.png' %}"></img>
-      <img height="50" src="{% static 'map/img/badges2.png' %}"></img>
-      <img height="50" src="{% static 'map/img/badges3.png' %}"></img>
-      <img height="50" src="{% static 'map/img/badges4.png' %}"></img>
-      <img height="50" src="{% static 'map/img/badges5.png' %}"></img>
-      <img height="50" src="{% static 'map/img/badges6.png' %}"></img>
-    </div>
-  </div>
-  <br><br>
-  <div class="row">
-    <div class="col s12 m6 l6">
-      {% for tag in user.profile.tags.all %}
-      <div class="chip">
-        {{tag.tag}}
+        <img height="50" src="{% static 'map/img/badges1.png' %}"></img>
+        <img height="50" src="{% static 'map/img/badges2.png' %}"></img>
+        <img height="50" src="{% static 'map/img/badges3.png' %}"></img>
+        <img height="50" src="{% static 'map/img/badges4.png' %}"></img>
+        <img height="50" src="{% static 'map/img/badges5.png' %}"></img>
+        <img height="50" src="{% static 'map/img/badges6.png' %}"></img>
       </div>
-      {% endfor %}
-      <br>
+    </div>
+    <br><br>
+    <div class="row">
+      <div class="col s12 m6 l6">
+        {% for tag in user.profile.tags.all %}
+        <div class="chip">
+          {{tag.tag}}
+        </div>
+        {% endfor %}
+        <br>
+      </div>
     </div>
   </div>
-</div>
 {% endblock %}

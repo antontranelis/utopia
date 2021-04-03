@@ -14,7 +14,7 @@
       <a class="dropdown-trigger popup-dropdown-trigger" data-target='popup_dropdown'><i style="margin-top: 12px;" class="material-icons">more_vert</i></a>
     </div>
     <div class="col s12">
-      <p>${place.fields.text}</p>
+      <p style="white-space: pre-line">${replaceURLs(place.fields.text)}</p>
         ${place.fields.tags.map((item, j) =>
           `<div class="chip" style="cursor: pointer; background-color: ${getTagColor(item)}; color: #fff">
               ${getTagText(item)}
