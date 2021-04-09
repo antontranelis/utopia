@@ -75,11 +75,12 @@ def api_request(request):
             for msg in form.error_messages:
                 messages.error(request, f"{msg}: {form.error_messages[msg]}")
 
-def profile(request):
+def profile(request, profilename):
     user = request.user
+    profile = User.objects.filter(username=profilename)
     return render(request=request,
                   template_name="map/profile.html",
-                  context={"user": user, "tagset": Tag.objects.all})
+                  context={"user": user, "profile": profile[0], "tagset": Tag.objects.all})
 
 def register(request):
     if request.method == "POST":
@@ -126,7 +127,7 @@ def login_request(request):
     return render(request, "map/login.html", context={"form":form})
 
 @login_required
-def preferences(request):
+def settings(request):
     if request.method == "POST":
         profile = Profile.objects.get(user=request.user)
         form = PreferencesForm(instance=profile, data=request.POST, files=request.FILES)
@@ -145,5 +146,5 @@ def preferences(request):
     }
     form = PreferencesForm(initial=initial_data)
     return render(request=request,
-                  template_name="map/preferences.html",
+                  template_name="map/settings.html",
                   context={"form": form})

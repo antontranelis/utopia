@@ -8,11 +8,12 @@
       <div style="display: flex; align-items: center; margin-top:7px;">
         ${profile.fields.avatar !== "" ? `<img style="border-radius: 50%;" width="64" src="/media/${profile.fields.avatar}"></img>&nbsp;&nbsp;&nbsp;` : ``}
         <div>
-          <p style="font-size: 200%; margin:0px;">${getUsernameById(profile.pk)}</p>
+          <p style="font-size: 200%; margin:0px;">${getUsernameById(profile.fields.user)}</p>
         </div>
       </div>
       <br>
-        <p style="white-space: pre-line">${replaceURLs(profile.fields.text)}</p>
+        <p style="white-space: pre-line">${profile.fields.text !== "" ? replaceURLs(profile.fields.text).split("\n")[0] : ``}</p>
+        <a style="float:right; color:#fff" class="brown waves-effect waves-light btn-small" href="profile/${getUsernameById(profile.fields.user)}">Profile</a>
       <br>
     </div>
   </div>

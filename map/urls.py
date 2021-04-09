@@ -24,8 +24,8 @@ app_name = 'map'
 
 urlpatterns = [
     path('', views.map, name='map'),
-    path('profile/', views.profile, name="profile"),
-    path('preferences/', views.preferences, name="preferences"),
+    path('profile/<str:profilename>', views.profile, name="profile"),
+    path('settings/', views.settings, name="settings"),
     path('register/', views.register, name="register"),
     path("login/", views.login_request, name="login"),
     path("logout/", views.logout_request, name="logout"),

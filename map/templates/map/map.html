@@ -40,7 +40,7 @@
       // -- init map --
 
       var map = null;
-      var new_popup = L.popup({minWidth: 275,  maxWidth:275, closeOnClick: false, keepInView: false, autoPanPaddingTopLeft: [0,60]});
+      var new_popup = L.popup({minWidth: 275,  maxWidth:275, keepInView: false, autoPanPaddingTopLeft: [0,60]});
       var edit_popup = L.popup({offset: [1,-25], minWidth: 275, maxWidth:275, keepInView: false, autoPanPaddingTopLeft: [0,60]});
       var current_popup_event;
       var all_layers;
@@ -310,6 +310,7 @@
         document.getElementById("lon").value = place.fields.lon.toFixed(6);
         document.getElementById("place_id").value = place.pk;
 
+
         M.textareaAutoResize(document.getElementById("id_text"));
         M.updateTextFields();
       }
@@ -388,6 +389,7 @@
       }
 
       function getUsernameById(id) {
+        console.log(id);
         var user = users.filter(item => {
                 return item.pk == id;
               })

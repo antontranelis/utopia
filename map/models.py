@@ -92,8 +92,8 @@ class Profile(models.Model):
         (PRIVATE, 'only specific users'),
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    text = models.TextField()
-    tags = models.ManyToManyField(Tag)
+    text = models.TextField(blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
     avatar = models.ImageField(upload_to='images/', blank=True)
     lat = models.FloatField(null=True)
     lon = models.FloatField(null=True)
