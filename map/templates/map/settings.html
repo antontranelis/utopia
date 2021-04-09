@@ -1,0 +1,148 @@
+{% extends "map/header.html" %}
+{% load static %}
+
+
+{% block content%}
+<script src="{% static 'map/vendors/cropperjs/js/cropper.js' %}" type="text/javascript"></script>
+<link href="{% static 'map/vendors/cropperjs/css/cropper.css' %}" rel="stylesheet">
+
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m6 l6">
+        <div style="display: flex; align-items: center; margin-top:7px;">
+            <img id="img-avatar" height="64" style="border-radius: 50%;" class="right" {% if user.profile.avatar %} src="/media/{{user.profile.avatar}}"{% endif %}></img>&nbsp;&nbsp;&nbsp;
+          <p style="font-size: 240%;">{{user.username}}</p>
+        </div>
+          <label for="id_avatar">Avatar</label><br>
+          <input type="file" id="id_avatar" name="avatar">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 m12">
+        <form method="POST" onsubmit="return submitForm(this)">
+            {% csrf_token %}
+            <div class="input-field">
+              <textarea id="id_text" name="text" class="materialize-textarea">{{user.profile.text}}</textarea>
+              <label for="id_text">Text</label>
+            </div>
+            <div id="interests" class="chips"></div>
+            <input type="submit" value="Submit">
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <div>
+          <img id="crop_image" alt="Picture" height="300px">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a onclick="finishCropping()" class="modal-close waves-effect waves-green btn-flat">Select</a>
+      </div>
+    </div>
+
+  </div>
+  <script type="text/javascript">
+    var file_input;
+    var modal;
+    var cropper;
+    var cropped_image;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    modal = M.Modal.init(elems, {dismissible:false});
+    file_input = document.getElementById('id_avatar');
+    file_input.onchange = function(e) {
+      modal[0].open();
+      console.log(modal);
+      document.querySelector('#crop_image').setAttribute('src', URL.createObjectURL(file_input.files[0]))
+      var image = document.querySelector('#crop_image');
+            cropper = new Cropper(image, {
+              aspectRatio: 1,
+            });
+    };
+
+  var elems0 = document.querySelectorAll('#interests');
+  var instances = M.Chips.init(elems0, {
+    data: [
+    {% for skill in user.profile.skills.all %}
+    {
+      tag: '{{skill.skill}}'
+    },
+    {% endfor %}],
+    autocompleteOptions: {
+      data: {
+        {% for skill in skillset %}
+          '{{skill.skill}}' : null,
+        {% endfor %}
+      },
+    },
+    placeholder: 'Skills, Interests, ... ',
+  });
+
+  console.log(file_input.files[0]);
+});
+
+function finishCropping() {
+  cropper.getCroppedCanvas().toBlob((blob) => {
+    document.getElementById('img-avatar').setAttribute('src', URL.createObjectURL(blob))
+    resizeBlob(blob);
+    cropper.destroy();
+  });
+}
+
+function submitForm(form) {
+  const XHR = new XMLHttpRequest();
+  var FD = new FormData( form );
+  console.log(file_input.files);
+  if(file_input.files.length > 0) {
+    FD.append('avatar', cropped_image, file_input.files[0].name)
+  }
+  else {
+    FD.append('avatar', "")
+  }
+  FD.append('text', document.getElementById("id_text").value);
+  XHR.open( "POST", "../settings/" );
+  XHR.onload = (r) => {
+    window.location.href = window.location.protocol + "//" + window.location.host + "/";
+  }
+  XHR.onerror = () => {
+    console.log("error");
+    console.log(r);
+  }
+  XHR.send(FD);
+
+  return false;
+
+}
+
+// === RESIZE ====
+
+function resizeBlob(blob) {
+
+  var img = new Image();
+  img.src = URL.createObjectURL(blob);
+  img.onload = function() {
+
+    var canvas = document.createElement('canvas');
+
+    // resize the canvas and draw the image data into it
+    canvas.width = 64;
+    canvas.height = 64;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, 64, 64);
+
+    canvas.toBlob(blb => cropped_image = blb);
+
+  }
+
+
+
+
+}
+
+
+</script>
+{% endblock %}

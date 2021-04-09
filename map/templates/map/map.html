@@ -91,8 +91,10 @@
             place.marker = marker;
           });
           profiles.forEach((profile, i) => {
-            var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(profile_layer);
-            profile.marker = marker;
+            if (profile.fields.lat != null){
+              var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(profile_layer);
+              profile.marker = marker;
+            }
           });
 
           map.on('popupopen', function(e) {
