@@ -364,8 +364,10 @@
         //Send the proper header information along with the request
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
-          profile.marker.remove();
-          all_layers.checkOut(profile.marker);
+          if (profile.marker != undefined) {
+            profile.marker.remove();
+            all_layers.checkOut(profile.marker);
+          }
           var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
           profile.marker = marker;
           M.toast({html: "You added your position to the map", classes: 'green darken-3 rounded', displayLength:4000});
