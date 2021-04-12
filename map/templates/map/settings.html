@@ -22,11 +22,15 @@
         <form method="POST" onsubmit="return submitForm(this)">
             {% csrf_token %}
             <div class="input-field">
+              <div id="interests" class="chips"></div>
+            </div>
+            <br>
+            <div class="input-field">
               <textarea id="id_text" name="text" class="materialize-textarea">{{user.profile.text}}</textarea>
               <label for="id_text">Text</label>
             </div>
-            <div style="display:none" id="interests" class="chips"></div>
             <input type="submit" value="Submit">
+
         </form>
       </div>
     </div>
@@ -49,6 +53,9 @@
     var modal;
     var cropper;
     var cropped_image;
+    var offers_input;
+    var offers = [];
+
 
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal');
@@ -65,24 +72,26 @@
     };
 
   var elems0 = document.querySelectorAll('#interests');
-  var instances = M.Chips.init(elems0, {
+  offers_input = M.Chips.init(elems0, {
     data: [
-    {% for skill in user.profile.skills.all %}
+    {% for offer in user.profile.offers.all %}
     {
-      tag: '{{skill.skill}}'
+      tag: '{{offer.offer}}'
     },
     {% endfor %}],
     autocompleteOptions: {
       data: {
-        {% for skill in skillset %}
-          '{{skill.skill}}' : null,
+        {% for offer in offerset %}
+          '{{offer.offer}}' : null,
         {% endfor %}
       },
     },
-    placeholder: 'Skills, Interests, ... ',
+    placeholder: 'I can offer ...',
+    secondaryPlaceholder: '+ offer',
+    onChipAdd: function () {
+      console.log(offers_input[0].chipsData);
+    },
   });
-
-  console.log(file_input.files[0]);
 });
 
 function finishCropping() {
@@ -103,7 +112,10 @@ function submitForm(form) {
   else {
     FD.append('avatar', "")
   }
-  FD.append('text', document.getElementById("id_text").value);
+  offers_input[0].chipsData.forEach((item, i) => {
+    FD.append('offers', item.tag)
+  });
+  console.log(offers);
   XHR.open( "POST", "../settings/" );
   XHR.onload = (r) => {
     window.location.href = window.location.protocol + "//" + window.location.host + "/";

@@ -11,6 +11,12 @@ class Tag(models.Model):
     def __str__(self):
         return self.tag
 
+class Offer(models.Model):
+    offer = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.offer
+
 class Event(models.Model):
     EVERYONE = 1
     EDITORS = 2
@@ -93,7 +99,7 @@ class Profile(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     text = models.TextField(blank=True)
-    tags = models.ManyToManyField(Tag, blank=True)
+    offers = models.ManyToManyField(Offer, blank=True)
     avatar = models.ImageField(upload_to='images/', blank=True)
     lat = models.FloatField(null=True)
     lon = models.FloatField(null=True)

@@ -1,15 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .models import Event, Place, Tag, Profile
+from .models import Event, Place, Tag, Profile, Offer
 from django.contrib.auth.models import User
-from .forms import NewUserForm, NewEventForm, NewPlaceForm, PreferencesForm
+from .forms import NewUserForm, NewEventForm, NewPlaceForm, ProfileForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core import serializers
 from django.utils.timezone import localtime, now
-# Create your views here.
 
 def map(request):
     eventForm = NewEventForm
@@ -18,10 +17,11 @@ def map(request):
     placesJSON = serializers.serialize('json', Place.objects.all())
     profilesJSON = serializers.serialize('json', Profile.objects.all())
     tagsJSON = serializers.serialize('json', Tag.objects.all())
+    offersJSON = serializers.serialize('json', Offer.objects.all())
     userNameJSON = serializers.serialize('json', User.objects.all(), fields=('username'))
     return render(request=request,
                   template_name="map/map.html",
-                  context={"events": eventsJSON, "places": placesJSON, "profiles": profilesJSON, "tags": tagsJSON, "users": userNameJSON, "event_form":eventForm, "place_form":placeForm})
+                  context={"events": eventsJSON, "places": placesJSON, "profiles": profilesJSON, "tags": tagsJSON, "offers": offersJSON, "users": userNameJSON, "event_form":eventForm, "place_form":placeForm})
 
 def api_request(request):
     if request.POST['type'] == "user_position":
@@ -130,21 +130,22 @@ def login_request(request):
 def settings(request):
     if request.method == "POST":
         profile = Profile.objects.get(user=request.user)
-        form = PreferencesForm(instance=profile, data=request.POST, files=request.FILES)
+        form = ProfileForm(instance=profile, data=request.POST, files=request.FILES)
         if form.is_valid():
-            form.save()
+            offers = request.POST.getlist('offers')
+            form.save(offers)
             messages.success(request, f"Preferences updated for {profile.user.username}")
             return redirect("map:map")
 
-
+    offerset = Offer.objects.all
 
     user = request.user
     initial_data = {
-        "tags": user.profile.tags.all(),
+        "offers": user.profile.offers.all(),
         "avatar": user.profile.avatar,
         "text": user.profile.text,
     }
-    form = PreferencesForm(initial=initial_data)
+    form = ProfileForm(initial=initial_data)
     return render(request=request,
                   template_name="map/settings.html",
-                  context={"form": form})
+                  context={"form": form, "offerset" : offerset})

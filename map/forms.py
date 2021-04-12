@@ -1,8 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Event, Place, Tag, Profile
+from .models import Event, Place, Tag, Profile, Offer
+import logging
 
+logger = logging.getLogger(__name__)
 
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -65,11 +67,25 @@ class NewPlaceForm(forms.ModelForm):
         return place
 
 
-class PreferencesForm(forms.ModelForm):
+class ProfileForm(forms.ModelForm):
    class Meta:
        model = Profile
-       fields = ['avatar','text', ]
+       fields = ['avatar','text',]
        widgets = {
              'text': forms.Textarea(attrs={'class': 'materialize-textarea'}),
-             'tags': forms.CheckboxSelectMultiple(attrs={'queryset': Tag.objects.all(), 'class': 'reset-checkbox'}),
+             'offers': forms.CheckboxSelectMultiple(attrs={'queryset': Offer.objects.all(), 'class': 'reset-checkbox'}),
         }
+
+   def save(self, offers, commit=True):
+        profile = super(ProfileForm, self).save(commit=False)
+        profile.offers.clear()
+        for off in offers:
+            logger.error(off)
+            count = Offer.objects.filter(offer=off).count()
+            if count > 0:
+                elem = Offer.objects.get(offer=off)
+            else:
+                elem = Offer(offer=off)
+                elem.save()
+            profile.offers.add(elem)
+        profile.save()

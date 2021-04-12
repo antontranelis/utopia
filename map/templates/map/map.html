@@ -33,6 +33,7 @@
   var profiles = JSON.parse("{{profiles|escapejs}}");
   console.log(profiles);
   var tags = JSON.parse("{{tags|escapejs}}");
+  var offers = JSON.parse("{{offers|escapejs}}");
   var users = JSON.parse("{{users|escapejs}}");
   if ("{{user.id}}" !== "None") var user_id = {{user.id}};
   var floatingActionButton;
@@ -383,6 +384,13 @@
                 return item.pk == id;
               })
         return tag[0].fields.tag;
+      }
+
+      function getOfferText(id) {
+        var offer = offers.filter(item => {
+                return item.pk == id;
+              })
+        return offer[0].fields.offer;
       }
 
       function getTagColor(id) {
