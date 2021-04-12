@@ -95,7 +95,7 @@ def register(request):
             return redirect("map:map")
         else:
             for msg in form.error_messages:
-                messages.error(request, f"{msg}: {form.error_messages[msg]}")
+                messages.error(request, "password fields did not match or the password is to weak")
 
     form = NewUserForm
     return render(request,
