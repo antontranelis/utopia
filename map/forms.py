@@ -70,13 +70,13 @@ class NewPlaceForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
    class Meta:
        model = Profile
-       fields = ['avatar','text',]
+       fields = ['avatar','text', 'color']
        widgets = {
              'text': forms.Textarea(attrs={'class': 'materialize-textarea'}),
              'offers': forms.CheckboxSelectMultiple(attrs={'queryset': Offer.objects.all(), 'class': 'reset-checkbox'}),
         }
 
-   def save(self, offers, commit=True):
+   def save(self, offers, requests, commit=True):
         profile = super(ProfileForm, self).save(commit=False)
         profile.offers.clear()
         for off in offers:
@@ -88,4 +88,15 @@ class ProfileForm(forms.ModelForm):
                 elem = Offer(offer=off)
                 elem.save()
             profile.offers.add(elem)
+
+        profile.requests.clear()
+        for req in requests:
+            logger.error(off)
+            count = Offer.objects.filter(offer=req).count()
+            if count > 0:
+                elem = Offer.objects.get(offer=req)
+            else:
+                elem = Offer(offer=req)
+                elem.save()
+            profile.requests.add(elem)
         profile.save()

@@ -5,16 +5,37 @@
 {% block content%}
 <script src="{% static 'map/vendors/cropperjs/js/cropper.js' %}" type="text/javascript"></script>
 <link href="{% static 'map/vendors/cropperjs/css/cropper.css' %}" rel="stylesheet">
+<script src="{% static 'map/vendors/jscolor/js/jscolor.min.js' %}" type="text/javascript"></script>
+
 
   <div class="container">
     <div class="row">
-      <div class="col s12 m6 l6">
+      <div class="col s12 m12 l12">
         <div style="display: flex; align-items: center; margin-top:7px;">
             <img id="img-avatar" height="64" style="border-radius: 50%;" class="right" {% if user.profile.avatar %} src="/media/{{user.profile.avatar}}"{% endif %}></img>&nbsp;&nbsp;&nbsp;
           <p style="font-size: 240%;">{{user.username}}</p>
         </div>
-          <label for="id_avatar">Avatar</label><br>
-          <input type="file" id="id_avatar" name="avatar">
+        <div class="row">
+          <div class="col s12 m12 l6" style="margin-bottom:10px;">
+            <label for="id_avatar">Avatar</label><br>
+            <input type="file" id="id_avatar" name="avatar">
+          </div>
+          <div class="col s12 m12 l6">
+            <label for="id_color">Color</label><br>
+            <input style="box-sizing: border-box; height:2rem;" id="id_color" value="{{user.profile.color}}" data-jscolor="{onInput:'update(this)'}">
+          </div>
+        </div>
+        <div class="row" style="margin-bottom:0px;">
+          <div class="col s12 m12 l6">
+            <label for="offers">Offers</label>
+            <div id="offers" class="chips">
+            </div>
+          </div>
+          <div class="col s12 m12 l6">
+            <label for="requests">Needs</label>
+            <div id="requests" class="chips"></div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -22,15 +43,10 @@
         <form method="POST" onsubmit="return submitForm(this)">
             {% csrf_token %}
             <div class="input-field">
-              <div id="interests" class="chips"></div>
-            </div>
-            <br>
-            <div class="input-field">
               <textarea id="id_text" name="text" class="materialize-textarea">{{user.profile.text}}</textarea>
               <label for="id_text">Text</label>
             </div>
             <input type="submit" value="Submit">
-
         </form>
       </div>
     </div>
@@ -55,6 +71,9 @@
     var cropped_image;
     var offers_input;
     var offers = [];
+    var request_input;
+    var requests = [];
+    var color = '{{user.profile.color}}';
 
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -71,7 +90,7 @@
             });
     };
 
-  var elems0 = document.querySelectorAll('#interests');
+  var elems0 = document.querySelectorAll('#offers');
   offers_input = M.Chips.init(elems0, {
     data: [
     {% for offer in user.profile.offers.all %}
@@ -88,6 +107,28 @@
     },
     placeholder: 'I can offer ...',
     secondaryPlaceholder: '+ offer',
+    onChipAdd: function () {
+      console.log(offers_input[0].chipsData);
+    },
+  });
+
+  var elems1 = document.querySelectorAll('#requests');
+  request_input = M.Chips.init(elems1, {
+    data: [
+    {% for request in user.profile.requests.all %}
+    {
+      tag: '{{request.offer}}'
+    },
+    {% endfor %}],
+    autocompleteOptions: {
+      data: {
+        {% for offer in offerset %}
+          '{{offer.offer}}' : null,
+        {% endfor %}
+      },
+    },
+    placeholder: "I'm looking for ...",
+    secondaryPlaceholder: '+ need',
     onChipAdd: function () {
       console.log(offers_input[0].chipsData);
     },
@@ -115,6 +156,10 @@ function submitForm(form) {
   offers_input[0].chipsData.forEach((item, i) => {
     FD.append('offers', item.tag)
   });
+  request_input[0].chipsData.forEach((item, i) => {
+    FD.append('requests', item.tag)
+  });
+  FD.append('color', color)
   console.log(offers);
   XHR.open( "POST", "../settings/" );
   XHR.onload = (r) => {
@@ -149,10 +194,10 @@ function resizeBlob(blob) {
     canvas.toBlob(blb => cropped_image = blb);
 
   }
+}
 
-
-
-
+function update(picker) {
+  color = picker.toString();
 }
 
 

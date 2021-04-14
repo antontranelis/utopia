@@ -133,7 +133,8 @@ def settings(request):
         form = ProfileForm(instance=profile, data=request.POST, files=request.FILES)
         if form.is_valid():
             offers = request.POST.getlist('offers')
-            form.save(offers)
+            requests = request.POST.getlist('requests')
+            form.save(offers,requests)
             messages.success(request, f"Preferences updated for {profile.user.username}")
             return redirect("map:map")
 

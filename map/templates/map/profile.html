@@ -12,12 +12,21 @@
           <p style="font-size: 240%;">{{profile.username|title}}</p>
         </div>
       </div>
-      <div class="col s12 m12 l12">
-      {% for offer in profile.profile.offers.all %}
-      <div class="chip">
-        {{offer.offer}}
+      <div class="col s12 m12 l6">
+        <p style="font-size: 0.8rem;color: #9e9e9e;">Offers</p>
+        {% for offer in profile.profile.offers.all %}
+          <div class="chip">
+            {{offer.offer}}
+          </div>
+        {% endfor %}
       </div>
-      {% endfor %}
+      <div class="col s12 m12 l6">
+        <p style="font-size: 0.8rem;color: #9e9e9e;">Needs</P>
+        {% for request in profile.profile.requests.all %}
+          <div class="chip" style="background-color:#FFE9D4;">
+            {{request.offer}}
+          </div>
+        {% endfor %}
       </div>
       <!--<div class="col s12 m6">
 

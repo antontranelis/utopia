@@ -93,7 +93,13 @@
           });
           profiles.forEach((profile, i) => {
             if (profile.fields.lat != null){
-              var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(profile_layer);
+              var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: L.ExtraMarkers.icon({
+                icon: 'fa-user',
+                markerColor: `${profile.fields.color}`,
+                shape: 'square',
+                prefix: 'fa',
+                svg: true
+              })}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(profile_layer);
               profile.marker = marker;
             }
           });
@@ -369,7 +375,13 @@
             profile.marker.remove();
             all_layers.checkOut(profile.marker);
           }
-          var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: redMarker}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
+          var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: L.ExtraMarkers.icon({
+            icon: 'fa-user',
+            markerColor: `${profile.fields.color}`,
+            shape: 'square',
+            prefix: 'fa',
+            svg: true
+          })}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {minWidth: 300}).addTo(profile_layer);
           profile.marker = marker;
           M.toast({html: "You added your position to the map", classes: 'green darken-3 rounded', displayLength:4000});
         }

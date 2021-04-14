@@ -7,11 +7,11 @@
     <div style="margin-top:7px;">
       ${profile.fields.avatar !== "" ? `<img style="vertical-align: middle; border-radius: 50%;" width="64" src="/media/${profile.fields.avatar}"></img>&nbsp;&nbsp;&nbsp;` : ``}
         <span style="font-size: 200%; margin:0px; color: #555">${getUsernameById(profile.fields.user)}</span>
-        <a style="float:right; margin-top:12px; color:#fff" class="brown waves-effect waves-light btn-small" href="profile/${getUsernameById(profile.fields.user)}">Profile</a>
+        <a style="float:right; margin-top:12px; color:#fff; background-color:${profile.fields.color}" class="waves-effect waves-light btn-small" href="profile/${getUsernameById(profile.fields.user)}">Profile</a>
     </div>
     <p style="white-space: pre-line">${profile.fields.text !== "" ? replaceURLs(profile.fields.text).split("\n")[0] : ``}</p>
       ${profile.fields.offers.map((item, j) =>
-        `<div class="chip">
+        `<div class="chip" >
             ${getOfferText(item)}
          </div>`
       ).join('')}
