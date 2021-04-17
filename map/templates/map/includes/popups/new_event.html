@@ -29,7 +29,7 @@
         <div class="col s6">
           <br>
           ${tags.map((item, j) =>
-            `${j == Math.floor(tags.length/2) ? `</div><div class="col s6"><br>` : ``}
+            `${j == Math.floor((tags.length+1)/2) ? `</div><div class="col s6"><br>` : ``}
             <li><label for="id_tags_${j}"><input type="checkbox" name="tags" value="${item.pk}"  class="reset-checkbox" id="id_tags_${j}">
               ${item.fields.tag}
             </label></li>`
