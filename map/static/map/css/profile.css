@@ -1,0 +1,17 @@
+.dropdown-content {
+  background-color: #fff !important;
+  overflow-x: hidden;
+  color: #000;
+}
+
+.dropdown-content li span {
+  color: #000;
+}
+
+.dropdown-content li:hover {
+  background-color: #aaa;
+}
+
+.dropdown-content li .highlight {
+  color: brown;
+}
