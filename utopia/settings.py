@@ -135,7 +135,7 @@ LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (51, 9.5),
     'DEFAULT_ZOOM': 9,
     'MIN_ZOOM': 3,
-    'MAX_ZOOM': 17,
+    'MAX_ZOOM': 18,
     'RESET_VIEW': False,
     'TILES': 'https://tile.osmand.net/hd/{z}/{x}/{y}.png',
     'DEFAULT_PRECISION': 6,
