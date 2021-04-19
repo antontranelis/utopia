@@ -77,7 +77,7 @@
               shape: 'square',
               prefix: 'fa',
               svg: true
-            })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {maxHeight: 400, minWidth: 275, maxWidth:275, autoClose: false, closeButon: false, autoPanPaddingTopLeft: [0,60]}).addTo(event_layer);
+            })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {maxHeight: 400, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,60]}).addTo(event_layer);
             event.marker = marker;
           });
           places.forEach((place, i) => {
