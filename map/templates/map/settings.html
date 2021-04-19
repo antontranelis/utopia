@@ -81,13 +81,7 @@
     modal = M.Modal.init(elems, {dismissible:false});
     file_input = document.getElementById('id_avatar');
     file_input.onchange = function(e) {
-      modal[0].open();
-      console.log(file_input.files[0]);
-      document.querySelector('#crop_image').setAttribute('src', URL.createObjectURL(file_input.files[0]))
-      var image = document.querySelector('#crop_image');
-            cropper = new Cropper(image, {
-              aspectRatio: 1,
-            });
+      openModal(file_input.files[0])
     };
 
   var elems0 = document.querySelectorAll('#offers');
@@ -178,7 +172,6 @@ function submitForm(form) {
 // === RESIZE ====
 
 function resizeBlob(blob) {
-
   var img = new Image();
   img.src = URL.createObjectURL(blob);
   img.onload = function() {
@@ -190,10 +183,49 @@ function resizeBlob(blob) {
     canvas.height = 64;
     var ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0, 64, 64);
-
     canvas.toBlob(blb => cropped_image = blb);
-
   }
+}
+
+function openModal(file) {
+  var img = new Image();
+  var url;
+  img.src = URL.createObjectURL(file);
+  img.onload = function() {
+
+    var canvas = document.createElement('canvas');
+
+    var MAX_WIDTH = 400;
+    var MAX_HEIGHT = 400;
+    var width = img.width;
+    var height = img.height;
+
+    if (width > height) {
+        if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+        }
+    } else {
+        if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+        }
+    }
+    canvas.width = width;
+    canvas.height = height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, width, height);
+    url = canvas.toDataURL(file_input.files[0].type);
+
+    modal[0].open();
+    console.log(file_input.files[0]);
+    var image = document.querySelector('#crop_image');
+    image.src=url;
+    cropper = new Cropper(image, {
+      aspectRatio: 1,
+    });
+  }
+
 }
 
 function update(picker) {

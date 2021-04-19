@@ -1,17 +1,17 @@
-.dropdown-content {
+.autocomplete-content {
   background-color: #fff !important;
   overflow-x: hidden;
   color: #000;
 }
 
-.dropdown-content li span {
+.autocomplete-content li span {
   color: #000;
 }
 
-.dropdown-content li:hover {
+.autocomplete-content li:hover {
   background-color: #aaa;
 }
 
-.dropdown-content li .highlight {
+.autocomplete-content li .highlight {
   color: brown;
 }
