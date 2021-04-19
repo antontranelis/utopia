@@ -55,6 +55,11 @@
   float: none !important;
 }
 
+.leaflet-popup-scrolled {
+  border-bottom: none !important;
+  border-top: none !important;
+}
+
 .photon-input {
   background-color: rgb(255, 255, 255) !important;
   border-radius: 5px !important;
