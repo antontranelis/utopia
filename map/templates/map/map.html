@@ -41,8 +41,8 @@
       // -- init map --
 
       var map = null;
-      var new_popup = L.popup({maxHeight: 385, minWidth: 275,  maxWidth:275, keepInView: false, autoPanPaddingTopLeft: [0,5]});
-      var edit_popup = L.popup({offset: [1,-25], maxHeight: 385, minWidth: 275, maxWidth:275, keepInView: false, autoPanPaddingTopLeft: [0,5]});
+      var new_popup = L.popup({maxHeight: 380, minWidth: 275,  maxWidth:275, keepInView: false, autoPanPaddingTopLeft: [0,5]});
+      var edit_popup = L.popup({offset: [1,-25], maxHeight: 380, minWidth: 275, maxWidth:275, keepInView: false, autoPanPaddingTopLeft: [0,5]});
       var current_popup_event;
       var all_layers;
       var event_layer = L.layerGroup();
@@ -77,7 +77,7 @@
               shape: 'square',
               prefix: 'fa',
               svg: true
-            })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {maxHeight: 385, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(event_layer);
+            })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {maxHeight: 380, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(event_layer);
             event.marker = marker;
           });
           places.forEach((place, i) => {
@@ -88,7 +88,7 @@
               shape: 'circle',
               prefix: 'fa',
               svg: true
-            })}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {maxHeight: 385, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(place_layer);
+            })}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {maxHeight: 380, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(place_layer);
             place.marker = marker;
           });
           profiles.forEach((profile, i) => {
@@ -99,7 +99,7 @@
                 shape: 'square',
                 prefix: 'fa',
                 svg: true
-              })}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {maxHeight: 385, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(profile_layer);
+              })}).bindPopup(`{% include "map/includes/popups/profile.html" %}`, {maxHeight: 380, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(profile_layer);
               profile.marker = marker;
             }
           });
@@ -449,7 +449,7 @@
               shape: 'circle',
               prefix: 'fa',
               svg: true
-            })}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {maxHeight: 385, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(place_layer);
+            })}).bindPopup(`{% include "map/includes/popups/place.html" %}`, {maxHeight: 380, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(place_layer);
             place.marker = marker;
           }
           if(object.model === "map.event") {
@@ -470,7 +470,7 @@
               shape: 'square',
               prefix: 'fa',
               svg: true
-            })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {maxHeight: 385, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(event_layer);
+            })}).bindPopup(`{% include "map/includes/popups/event.html" %}`, {maxHeight: 380, minWidth: 275, maxWidth:275, autoPanPaddingTopLeft: [0,5]}).addTo(event_layer);
             event.marker = marker;
           }
 
