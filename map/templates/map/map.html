@@ -106,7 +106,7 @@
 
           map.on('popupopen', function(e) {
             // -- init popup popdowns
-            var el = document.querySelectorAll(".dropdown-trigger");
+            var el = document.querySelectorAll(".popup-dropdown-trigger");
             M.Dropdown.init(el,{coverTrigger:false, hover: false, constrainWidth: false});
             // -- cache popup-data
             current_popup_event = e;
@@ -497,7 +497,7 @@
         var elems = document.querySelectorAll('.fixed-action-btn');
         floatingActionButton = M.FloatingActionButton.init(elems, {hoverEnabled: false});
         var el = document.querySelectorAll(".dropdown-trigger");
-        M.Dropdown.init(el,{coverTrigger:false, hover: false, constrainWidth: false});
+        M.Dropdown.init(el,{coverTrigger:false, hover: false});
         setMapHeight();
 
       });

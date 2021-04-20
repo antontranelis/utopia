@@ -18,7 +18,7 @@
         <div class="row">
           <div class="col s12 m12 l6" style="margin-bottom:10px;">
             <label for="id_avatar">Avatar</label><br>
-            <input type="file" id="id_avatar" name="avatar">
+            <input type="file" id="id_avatar" name="avatar" accept="image/*">
           </div>
           <div class="col s12 m12 l6">
             <label for="id_color">Color</label><br>
@@ -52,13 +52,13 @@
     </div>
 
     <!-- Modal Structure -->
-    <div id="modal1" class="modal">
-      <div class="modal-content">
-        <div>
-          <img id="crop_image" alt="Picture" height="300px">
+    <div id="modal1" class="modal" style="margin: 0px auto;">
+      <div class="modal-content" style="margin: 0px auto;">
+        <div style="margin: 0px auto;">
+          <img id="crop_image" alt="Picture" height="300px" style="width: 100%;">
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="margin: 0px auto;">
         <a onclick="finishCropping()" class="modal-close waves-effect waves-green btn-flat">Select</a>
       </div>
     </div>
@@ -81,7 +81,7 @@
     modal = M.Modal.init(elems, {dismissible:false});
     file_input = document.getElementById('id_avatar');
     file_input.onchange = function(e) {
-      openModal(file_input.files[0])
+      initCropper(file_input.files[0])
     };
 
   var elems0 = document.querySelectorAll('#offers');
@@ -128,14 +128,6 @@
     },
   });
 });
-
-function finishCropping() {
-  cropper.getCroppedCanvas().toBlob((blob) => {
-    document.getElementById('img-avatar').setAttribute('src', URL.createObjectURL(blob))
-    resizeBlob(blob);
-    cropper.destroy();
-  });
-}
 
 function submitForm(form) {
   const XHR = new XMLHttpRequest();
@@ -187,13 +179,15 @@ function resizeBlob(blob) {
   }
 }
 
-function openModal(file) {
+function initCropper(file) {
   var img = new Image();
   var url;
   img.src = URL.createObjectURL(file);
   img.onload = function() {
 
     var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
 
     var MAX_WIDTH = 400;
     var MAX_HEIGHT = 400;
@@ -221,11 +215,22 @@ function openModal(file) {
     console.log(file_input.files[0]);
     var image = document.querySelector('#crop_image');
     image.src=url;
-    cropper = new Cropper(image, {
-      aspectRatio: 1,
-    });
+    image.onload = function() {
+      cropper = new Cropper(image, {
+        aspectRatio: 1,
+        movable: false,
+        zoomable: false,
+      });
+    }
   }
+}
 
+function finishCropping() {
+  cropper.getCroppedCanvas().toBlob((blob) => {
+    document.getElementById('img-avatar').setAttribute('src', URL.createObjectURL(blob))
+    resizeBlob(blob);
+    cropper.destroy();
+  });
 }
 
 function update(picker) {
