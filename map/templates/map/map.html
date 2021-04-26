@@ -142,7 +142,7 @@
                 });
                 counts.sort(function(a, b){return b.count-a.count});
                 console.log(counts);
-            		return new L.DivIcon({ html: `<div style="background-color:${counts[0].color};opacity: 0.9;"><div style="background-color:${counts.length > 1 ? counts[1].color : counts[0].color}; opacity: 1;"><span><b>${childCount}</b></span></div></div>`, className: 'marker-cluster', iconSize: new L.Point(40, 40) });
+            		return new L.DivIcon({ html: `<div style="background-color:${counts.length > 1 ? counts[1].color : counts[0].color};opacity: 0.9;"><div style="background-color:${counts[0].color}; opacity: 1;"><span><b>${childCount}</b></span></div></div>`, className: 'marker-cluster', iconSize: new L.Point(40, 40) });
             	}});
           all_layers.addLayer(profile_layer);
           all_layers.addLayer(event_layer);
