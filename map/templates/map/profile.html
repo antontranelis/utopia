@@ -50,7 +50,9 @@
   </div>
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('text').innerHTML = replaceURLs(`{{profile.profile.text}}`);
+      if (`{{profile.profile.text}}` !== ``) {
+        document.getElementById('text').innerHTML = replaceURLs(`{{profile.profile.text}}`);
+      }
     });
 
     function replaceURLs(message) {
