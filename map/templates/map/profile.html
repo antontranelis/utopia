@@ -60,7 +60,7 @@
 
       var urlRegex = /(^| )(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
       message = message.replace(urlRegex, function (url) {
-        var hyperlink = url;
+        var hyperlink = url.replace(' ','');
         if (!hyperlink.match('^https?:\/\/')) {
           hyperlink = 'http://' + hyperlink;
         }
