@@ -521,7 +521,7 @@
       function replaceURLs(message) {
         if(!message) return;
 
-        var urlRegex = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-zA-Z0-9._-]+([\-\.]{1}[a-zA-Z0-9._-]+)*\.[a-z]{2,8}(:[0-9]{1,8})?(\/.*)?$/gm;
+        var urlRegex = /(^| )(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-zA-Z0-9._-]+([\-\.]{1}[a-zA-Z0-9._-]+)*\.[a-z]{2,8}(:[0-9]{1,8})?(\/.*)?$/gm;
         message = message.replace(urlRegex, function (url) {
           var hyperlink = url;
           if (!hyperlink.match('^https?:\/\/')) {
