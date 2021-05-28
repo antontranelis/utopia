@@ -521,14 +521,21 @@
       function replaceURLs(message) {
         if(!message) return;
 
-        var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-        return message.replace(urlRegex, function (url) {
+        var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,7}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+        message = message.replace(urlRegex, function (url) {
           var hyperlink = url;
           if (!hyperlink.match('^https?:\/\/')) {
             hyperlink = 'http://' + hyperlink;
           }
           return '<a href="' + hyperlink + '" target="_blank" rel="noopener noreferrer">' + url + '</a>'
         });
+
+        var mailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+        message = message.replace(mailRegex, function (mail) {
+          return '<a href="mailto:' + mail + '">' + mail + '</a>'
+        });
+
+        return message;
       }
 
 
