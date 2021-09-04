@@ -29,9 +29,7 @@
 <script type="text/javascript">
   var events = JSON.parse("{{events|escapejs}}");
   var places = JSON.parse("{{places|escapejs}}");
-  //console.log({{profiles}});
   var profiles = JSON.parse("{{profiles|escapejs}}");
-  console.log(profiles);
   var tags = JSON.parse("{{tags|escapejs}}");
   var offers = JSON.parse("{{offers|escapejs}}");
   var users = JSON.parse("{{users|escapejs}}");
@@ -141,7 +139,6 @@
                   }
                 });
                 counts.sort(function(a, b){return b.count-a.count});
-                console.log(counts);
             		return new L.DivIcon({ html: `<div style="background-color:${counts.length > 1 ? counts[1].color : counts[0].color};opacity: 0.9;"><div style="background-color:${counts[0].color}; opacity: 1;"><span><b>${childCount}</b></span></div></div>`, className: 'marker-cluster', iconSize: new L.Point(40, 40) });
             	}});
           all_layers.addLayer(profile_layer);
@@ -414,7 +411,6 @@
       }
 
       function getUsernameById(id) {
-        console.log(id);
         var user = users.filter(item => {
                 return item.pk == id;
               })
@@ -427,10 +423,8 @@
         XHR.open( "POST", "api/" );
         XHR.onload = (r) => {
           let str = escapeString(r.target.response);
-          console.log(str);
           let object = JSON.parse(str);
           object = object.object;
-          console.log(object);
           if(object.model === "map.place") {
             place = object;
             place.fields.text = document.getElementById('id_text').value;
