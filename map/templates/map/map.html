@@ -108,6 +108,25 @@
             M.Dropdown.init(el,{coverTrigger:false, hover: false, constrainWidth: false});
             // -- cache popup-data
             current_popup_event = e;
+
+            var event = events.filter(evt => {
+              return evt.marker == current_popup_event.popup._source;
+            })
+            if(event.length>0)
+            window.history.pushState("object or string", "Title", "/event/"+event[0].pk);
+
+            var place = places.filter(plc => {
+              return plc.marker == current_popup_event.popup._source;
+            })
+            if(place.length>0)
+            window.history.pushState("object or string", "Title", "/place/"+place[0].pk);
+
+            var profile = profiles.filter(pro => {
+              return pro.marker == current_popup_event.popup._source;
+            })
+            if(profile.length>0)
+            window.history.pushState("object or string", "Title", "/people/"+profile[0].pk);
+
           });
 
           map.on('click', function(e) {
@@ -170,6 +189,30 @@
 
           L.control.locate({"iconElementTag" : "i", "icon" : "fa fa-crosshairs", position: "topright"}).addTo(map);
 
+
+          var event = events.filter(evt => {
+            return evt.pk == {{open_event}};
+          })
+          var place = places.filter(plc => {
+            return plc.pk == {{open_place}};
+          })
+          var people = profiles.filter(pro => {
+            return pro.pk == {{open_people}};
+          })
+
+          if(event.length>0) {
+            all_layers.zoomToShowLayer(event[0].marker, x => event[0].marker.openPopup());
+          }
+
+
+          if(place.length>0) {
+            all_layers.zoomToShowLayer(place[0].marker, x => place[0].marker.openPopup());
+          }
+
+
+          if(people.length>0) {
+            all_layers.zoomToShowLayer(people[0].marker, x => people[0].marker.openPopup());
+          }
 
 
           //loadMapView([4,7]);
@@ -259,7 +302,7 @@
         var event = events.find(evt => {
           return evt.marker == current_popup_event.popup._source;
         })
-        var url = "api/";
+        var url = "//api/";
         var params = `id=${event.pk}&type=delete_event&csrfmiddlewaretoken={{ csrf_token }}`;
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
@@ -327,7 +370,7 @@
         var place = places.find(pla => {
           return pla.marker == current_popup_event.popup._source;
         })
-        var url = "api/";
+        var url = "/api/";
         var params = `id=${place.pk}&type=delete_place&csrfmiddlewaretoken={{ csrf_token }}`;
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
@@ -361,7 +404,7 @@
         profile.fields.lat = e.latlng.lat.toFixed(6);
         profile.fields.lon = e.latlng.lng.toFixed(6);
 
-        var url = "api/";
+        var url = "/api/";
         var params = `lat=${e.latlng.lat.toFixed(6)}&lng=${e.latlng.lng.toFixed(6)}&type=user_position&csrfmiddlewaretoken={{ csrf_token }}`;
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
@@ -420,7 +463,7 @@
       function submitForm(form) {
         const XHR = new XMLHttpRequest();
         const FD = new FormData( form );
-        XHR.open( "POST", "api/" );
+        XHR.open( "POST", "/api/" );
         XHR.onload = (r) => {
           let str = escapeString(r.target.response);
           let object = JSON.parse(str);

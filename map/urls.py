@@ -24,6 +24,9 @@ app_name = 'map'
 
 urlpatterns = [
     path('', views.map, name='map'),
+    path('event/<int:event>', views.map, name='map'),
+    path('people/<int:people>', views.map, name='map'),
+    path('place/<int:place>', views.map, name='map'),
     path('profile/<str:profilename>', views.profile, name="profile"),
     path('settings/', views.settings, name="settings"),
     path('register/', views.register, name="register"),

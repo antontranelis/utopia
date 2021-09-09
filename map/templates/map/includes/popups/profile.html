@@ -7,7 +7,7 @@
     <div style="margin-top:7px;">
       ${profile.fields.avatar !== "" ? `<img style="vertical-align: middle; border-radius: 50%;" width="64" src="/media/${profile.fields.avatar}"></img>&nbsp;&nbsp;&nbsp;` : ``}
         <span style="font-size: 200%; margin:0px; color: #555">${getUsernameById(profile.fields.user)}</span>
-        <a style="float:right; margin-top:12px; color:#fff; background-color:${profile.fields.color}" class="waves-effect waves-light btn-small" href="profile/${getUsernameById(profile.fields.user)}">Profile</a>
+        <a style="float:right; margin-top:12px; color:#fff; background-color:${profile.fields.color}" class="waves-effect waves-light btn-small" href="/profile/${getUsernameById(profile.fields.user)}">Profile</a>
     </div>
     <p>${profile.fields.text !== "" ? replaceURLs(profile.fields.text.split("\n")[0].substring(0, 249)) : ``}
       ${profile.fields.text.split("\n")[0].length > 250 ?

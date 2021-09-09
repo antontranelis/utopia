@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.core import serializers
 from django.utils.timezone import localtime, now
 
-def map(request):
+def map(request,event=0,place=0,people=0):
     eventForm = NewEventForm
     placeForm = NewPlaceForm
     eventsJSON = serializers.serialize('json', Event.objects.filter(date_end__gte = localtime(now()).date()))
@@ -21,7 +21,7 @@ def map(request):
     userNameJSON = serializers.serialize('json', User.objects.all(), fields=('username'))
     return render(request=request,
                   template_name="map/map.html",
-                  context={"events": eventsJSON, "places": placesJSON, "profiles": profilesJSON, "tags": tagsJSON, "offers": offersJSON, "users": userNameJSON, "event_form":eventForm, "place_form":placeForm})
+                  context={"events": eventsJSON, "places": placesJSON, "profiles": profilesJSON, "tags": tagsJSON, "offers": offersJSON, "users": userNameJSON, "event_form":eventForm, "place_form":placeForm, "open_event": event, "open_people":people, "open_place": place})
 
 def api_request(request):
     if request.POST['type'] == "user_position":
