@@ -10,6 +10,11 @@
   <link rel="icon" type="image/png" href="{% static 'map/img/rocket2.ico' %}">
   <title>docutopia</title>
 
+  {% if profile %}
+    <meta property="og:title" content="{{profile.username|title}}">
+    <meta property="og:image" content="/media/{{profile.profile.avatar}}">
+  {% endif %}
+
 
 </head>
 
