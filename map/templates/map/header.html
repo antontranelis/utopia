@@ -11,7 +11,7 @@
   <title>docutopia</title>
 
   {% if profile %}
-    <meta property="og:image" content="/media/{{profile.profile.avatar}}">
+    <meta property="og:image" content="/media/{{profile.profile.avatar}}"/>
     <meta property="og:description" content="{{profile.profile.text|truncatewords:25}}" />
     <meta property="og:site_name" content="{{profile.username|title}}"/>
   {% endif %}
@@ -19,13 +19,14 @@
   {% if open_event %}
   <meta property="og:description" content="{{open_event.text|truncatewords:25}}" />
   <meta property="og:site_name" content="{{open_event.title|title}}"/>
+  <meta property="og:image" content="{% static 'map/img/rocket2.ico' %}"/>
   {% endif %}
 
 
   {% if open_place %}
     <meta property="og:description" content="{{open_place.text|truncatewords:25}}" />
     <meta property="og:site_name" content="{{open_place.title|title}}"/>
-    <meta property="og:image" content="{% static 'map/img/rocket2.ico' %}">
+    <meta property="og:image" content="{% static 'map/img/rocket2.ico' %}"/>
   {% endif %}
 
   {% if open_people %}
