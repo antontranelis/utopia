@@ -13,8 +13,7 @@
   {% if profile %}
     <meta property="og:title" content="{{profile.username|title}}">
     <meta property="og:image" content="/media/{{profile.profile.avatar}}">
-    <meta property="og:description" content="{{profile.profile.text|truncatechars:50}}" />
-    <meta property="og:site_name" content="Docutopia"/>
+    <meta property="og:description" content="{{profile.profile.text|truncatechars:100}}" />
   {% endif %}
 
 
