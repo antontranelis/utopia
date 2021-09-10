@@ -25,6 +25,7 @@
   {% if open_place %}
     <meta property="og:description" content="{{open_place.text|truncatewords:25}}" />
     <meta property="og:site_name" content="{{open_place.title|title}}"/>
+    <meta property="og:image" content="{% static 'map/img/rocket2.ico' %}">
   {% endif %}
 
   {% if open_people %}
