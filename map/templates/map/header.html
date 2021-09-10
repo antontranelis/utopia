@@ -16,6 +16,23 @@
     <meta property="og:site_name" content="{{profile.username|title}}"/>
   {% endif %}
 
+  {% if open_event %}
+  <meta property="og:description" content="{{open_event.text|truncatewords:25}}" />
+  <meta property="og:site_name" content="{{open_event.title|title}}"/>
+  {% endif %}
+
+
+  {% if open_place %}
+    <meta property="og:description" content="{{open_place.text|truncatewords:25}}" />
+    <meta property="og:site_name" content="{{open_place.title|title}}"/>
+  {% endif %}
+
+  {% if open_people %}
+    <meta property="og:image" content="/media/{{open_people.profile.avatar}}">
+    <meta property="og:description" content="{{open_people.profile.text|truncatewords:25}}" />
+    <meta property="og:site_name" content="{{open_people.username|title}}"/>
+  {% endif %}
+
 
 </head>
 

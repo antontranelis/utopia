@@ -189,30 +189,33 @@
 
           L.control.locate({"iconElementTag" : "i", "icon" : "fa fa-crosshairs", position: "topright"}).addTo(map);
 
-
-          var event = events.filter(evt => {
-            return evt.pk == {{open_event}};
-          })
-          var place = places.filter(plc => {
-            return plc.pk == {{open_place}};
-          })
-          var people = profiles.filter(pro => {
-            return pro.pk == {{open_people}};
-          })
-
-          if(event.length>0) {
+          {% if open_event %}
+            let open_event = {{open_event.pk}};
+            let event = events.filter(evt => {
+              return evt.pk == open_event;
+            })
             all_layers.zoomToShowLayer(event[0].marker, x => event[0].marker.openPopup());
-          }
+          {% endif %}
 
 
-          if(place.length>0) {
+          {% if open_place %}
+            let open_place = {{open_place.pk}};
+            let place = places.filter(plc => {
+              return plc.pk == open_place;
+            })
             all_layers.zoomToShowLayer(place[0].marker, x => place[0].marker.openPopup());
-          }
+          {% endif %}
 
-
-          if(people.length>0) {
+          {% if open_people %}
+            let open_people = {{open_people.pk}};
+            let people = profiles.filter(pro => {
+              return pro.pk == open_people;
+            })
             all_layers.zoomToShowLayer(people[0].marker, x => people[0].marker.openPopup());
-          }
+          {% endif %}
+
+
+
 
 
           //loadMapView([4,7]);

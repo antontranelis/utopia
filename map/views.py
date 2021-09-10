@@ -11,6 +11,15 @@ from django.core import serializers
 from django.utils.timezone import localtime, now
 
 def map(request,event=0,place=0,people=0):
+    if event != 0:
+        event = Event.objects.filter(pk=event)
+        event = event[0]
+    if place != 0:
+        place = Place.objects.filter(pk=place)
+        place = place[0]
+    if people != 0:
+        people = User.objects.filter(pk=people)
+        people = people[0]
     eventForm = NewEventForm
     placeForm = NewPlaceForm
     eventsJSON = serializers.serialize('json', Event.objects.filter(date_end__gte = localtime(now()).date()))
