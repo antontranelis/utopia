@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block content%}
+<head>
+  <meta property="og:title" content="{{profile.username|title}}">
+  <meta property="og:image" content="/media/{{profile.profile.avatar}}">
+  <meta property="og:description" content="Blog describing meta tags, their purpose and relevance in a web page or web site">
+</head>
   <div class="container">
     <div class="row">
       <div class="col s12 m12 l12">
