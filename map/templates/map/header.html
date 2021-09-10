@@ -12,7 +12,7 @@
 
   {% if profile %}
     <meta property="og:image" content="/media/{{profile.profile.avatar}}">
-    <meta property="og:description" content="{{profile.profile.text|truncatechars:50}}" />
+    <meta property="og:description" content="{{profile.profile.text|truncatechars:100}}" />
     <meta property="og:site_name" content="{{profile.username|title}}"/>
   {% endif %}
 
