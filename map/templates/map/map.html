@@ -305,7 +305,7 @@
         var event = events.find(evt => {
           return evt.marker == current_popup_event.popup._source;
         })
-        var url = "//api/";
+        var url = "/api/";
         var params = `id=${event.pk}&type=delete_event&csrfmiddlewaretoken={{ csrf_token }}`;
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
