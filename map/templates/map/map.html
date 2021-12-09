@@ -90,7 +90,7 @@
             place.marker = marker;
           });
           profiles.forEach((profile, i) => {
-            if (profile.fields.lat != null){
+            if (profile.fields.lat != null && profile.fields.lat != 0){
               var marker = L.marker([profile.fields.lat, profile.fields.lon],{icon: L.ExtraMarkers.icon({
                 icon: 'fa-user',
                 markerColor: `${profile.fields.color}`,
