@@ -19,7 +19,7 @@ Check out our working prototype at [new.docutopia.de](https://new.docutopia.de)
 * These three types of entries you can search and/or map easily yourself:
     * Places
     * Events (temporary places)
-    *  People (profiles)
+    * People (profiles)
 
 Sharing of places and events does not require registration/login
 
@@ -38,3 +38,6 @@ python manage.py migrate
 ```
 python manage.py runserver
 ```
+## Get in Contact
+
+If you want to run your own instance feel free to reach out for support: [mail@antontranelis.de](mailto:mail@antontranelis.de)
