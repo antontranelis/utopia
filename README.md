@@ -8,24 +8,18 @@ Check out our working prototype at [new.docutopia.de](https://new.docutopia.de)
 
 ## Features
 
-* Register / Login...to create a profile and share your profile location wherever you would like to map it.
-
-* Your Profile includes:
-    * avatar (sml. profile picture)
-    * offers (you would like to make)
-    * needs (you would like to be satisfied)
-    * free text (please add your phonenr. or mail to be reachable)
-
 * These three types of entries you can search and/or map easily yourself:
     * Places
     * Events (temporary places)
     * People (profiles)
 
+* Register / Login...to create a profile and share your profile location wherever you would like to map it. Your Profile includes:
+    * avatar (sml. profile picture)
+    * offers (you would like to make)
+    * needs (you would like to be satisfied)
+    * free text (please add your phonenr. or mail to be reachable)
+
 Sharing of places and events does not require registration/login
-
-HAPPY MAPPING . . . .
-
-NAMA(P)STÉ
 
 ## Install
 ```
